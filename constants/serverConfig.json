@@ -1,0 +1,12 @@
+{
+    "port": 80,
+    "host": "0.0.0.0",
+    "defaultLanguage": "en",
+    "x-powered-by": false,
+    "root": {
+        "disable": false,
+        "v1": {
+            "disable": false
+        }
+    }
+}

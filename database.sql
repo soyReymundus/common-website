@@ -1,0 +1,182 @@
+CREATE DATABASE CommonWeb; 
+
+USE CommonWeb;
+
+CREATE TABLE ChatStatus (
+    ID int NOT NULL AUTO_INCREMENT,
+    Message varchar(32),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO ChatStatus (Message) VALUES ('Ok'); #1
+INSERT INTO ChatStatus (Message) VALUES ('Hidden'); #2 #Change this
+
+CREATE TABLE CodeTypes (
+    ID int NOT NULL AUTO_INCREMENT,
+    Type varchar(32),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO CodeTypes (Type) VALUES ('Reset'); #1 
+INSERT INTO CodeTypes (Type) VALUES ('Email'); #2
+
+CREATE TABLE PostStatus (
+    ID int NOT NULL AUTO_INCREMENT,
+    Message varchar(32),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO PostStatus (Message) VALUES ('Ok'); #1 
+INSERT INTO PostStatus (Message) VALUES ('Deleted'); #2
+INSERT INTO PostStatus (Message) VALUES ('Hidden'); #3
+
+CREATE TABLE UserStatus (
+    ID int NOT NULL AUTO_INCREMENT,
+    Message varchar(32),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO UserStatus (Message) VALUES ('Ok'); #1
+INSERT INTO UserStatus (Message) VALUES ('Need actions'); #2
+INSERT INTO UserStatus (Message) VALUES ('Deleted'); #3
+INSERT INTO UserStatus (Message) VALUES ('Banned'); #4
+
+CREATE TABLE UserPermissions (
+    ID int NOT NULL AUTO_INCREMENT,
+    Name varchar(32),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO UserPermissions (Name) VALUES ('None'); #1
+INSERT INTO UserPermissions (Name) VALUES ('Moderator'); #2
+INSERT INTO UserPermissions (Name) VALUES ('Administrator'); #3
+
+CREATE TABLE Users (
+    ID int NOT NULL AUTO_INCREMENT,
+    Username varchar(32),
+    DisplayName varchar(32),
+    Photo varchar(64),
+    Password varchar(64) NOT NULL,
+    PasswordResets INT NOT NULL DEFAULT 0,
+    EmailResets INT NOT NULL DEFAULT 0,
+    Banner varchar(64),
+    Email varchar(320),
+    Description varchar(5000),
+    Status int NOT NULL DEFAULT 2,
+    Permissions int NOT NULL DEFAULT 1,
+    LastName varchar(255),
+    FirstName varchar(255),
+    BirthDate BIGINT,
+    DeletionDate BIGINT,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (Status) REFERENCES UserStatus(ID),
+    FOREIGN KEY (Permissions) REFERENCES UserPermissions(ID),
+    UNIQUE (Username)
+);
+
+CREATE TABLE ChatsInfo (
+    ID int NOT NULL AUTO_INCREMENT,
+    UserID int NOT NULL,
+    Unread int,
+    closed BOOL NOT NULL,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+CREATE TABLE Chats (
+    ID int NOT NULL AUTO_INCREMENT,
+    User int NOT NULL,
+    User2 int NOT NULL,
+    LastMessageID int NOT NULL DEFAULT 1,
+    Status int NOT NULL DEFAULT 1,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (Status) REFERENCES ChatStatus(ID),
+    FOREIGN KEY (User) REFERENCES ChatsInfo(ID),
+    FOREIGN KEY (User2) REFERENCES ChatsInfo(ID)
+);
+
+CREATE TABLE Messages (
+    ID int NOT NULL,
+    ChatID int NOT NULL,
+    UserID int NOT NULL,
+    Content varchar(2000),
+    Attachments varchar(325),
+    PublicationDate BIGINT,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
+    FOREIGN KEY (ChatID) REFERENCES Chats(ID)
+);
+
+CREATE TABLE Posts (
+    ID int NOT NULL AUTO_INCREMENT,
+    PostID int,
+    UserID int NOT NULL,
+    Title varchar(32),
+    Content varchar(15000),
+    PublicationDate BIGINT,
+    Status int NOT NULL DEFAULT 1,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (Status) REFERENCES PostStatus(ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+CREATE TABLE UsersPunishments (
+    ID int NOT NULL AUTO_INCREMENT,
+    LegalPunishment BOOL NOT NULL,
+    UserID int NOT NULL,
+    Ended BOOL NOT NULL,
+    Reason varchar(32),
+    Duration BIGINT,
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE PostsOpinions (
+    ID int NOT NULL AUTO_INCREMENT,
+    PostID int NOT NULL,
+    Like BOOL NOT NULL,
+    FOREIGN KEY (PostID) REFERENCES Posts(ID),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE PostsPunishments (
+    ID int NOT NULL AUTO_INCREMENT,
+    LegalPunishment BOOL NOT NULL,
+    Removed BOOL NOT NULL,
+    PostID int NOT NULL,
+    Reason varchar(32),
+    FOREIGN KEY (PostID) REFERENCES Posts(ID),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE ChatsPunishments (
+    ID int NOT NULL AUTO_INCREMENT,
+    LegalPunishment BOOL NOT NULL,
+    Removed BOOL NOT NULL,
+    ChatID int NOT NULL,
+    Reason varchar(32),
+    FOREIGN KEY (ChatID) REFERENCES Chats(ID),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO Users (Username, Password) VALUES ('Banned', 'gay');
+INSERT INTO Users (Username, Password) VALUES ('Owo', 'gay');
+INSERT INTO Users (Username, Password, DeletionDate) VALUES ('Uwu', 'gay', 5841854158);
+
+SELECT * FROM Users WHERE DeletionDate < 5841854159;
+SELECT * FROM Users WHERE DeletionDate > 5841854159;
+
+INSERT INTO ChatsInfo (UserID, closed) VALUES (1, 0);
+INSERT INTO ChatsInfo (UserID, closed) VALUES (2, 0);
+
+INSERT INTO Chats (User, User2, LastMessageID) VALUES (1, 2, 0);
+
+INSERT INTO Messages (ChatID, UserID, Content)
+VALUES (1, 2, 'Hola');
+
+INSERT INTO Messages (ChatID, UserID, Content)
+VALUES (1, 2, '?');
+
+INSERT INTO Messages (ChatID, UserID, Content)
+VALUES (1, 1, 'quien chota sos?');
+
