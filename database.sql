@@ -120,6 +120,33 @@ CREATE TABLE Posts (
     FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
 
+CREATE TABLE UsersBlocks (
+    ID int NOT NULL AUTO_INCREMENT,
+    FROM int NOT NULL,
+    TO int NOT NULL,
+    FOREIGN KEY (FROM) REFERENCES Users(ID),
+    FOREIGN KEY (TO) REFERENCES Users(ID),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE UsersFriends (
+    ID int NOT NULL AUTO_INCREMENT,
+    User int NOT NULL,
+    User2 int NOT NULL,
+    FOREIGN KEY (User) REFERENCES Users(ID),
+    FOREIGN KEY (User2) REFERENCES Users(ID),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE UsersFriendRequests (
+    ID int NOT NULL AUTO_INCREMENT,
+    FROM int NOT NULL,
+    TO int NOT NULL,
+    FOREIGN KEY (FROM) REFERENCES Users(ID),
+    FOREIGN KEY (TO) REFERENCES Users(ID),
+    PRIMARY KEY (ID)
+);
+
 CREATE TABLE UsersPunishments (
     ID int NOT NULL AUTO_INCREMENT,
     LegalPunishment BOOL NOT NULL,
@@ -158,25 +185,3 @@ CREATE TABLE ChatsPunishments (
     FOREIGN KEY (ChatID) REFERENCES Chats(ID),
     PRIMARY KEY (ID)
 );
-
-INSERT INTO Users (Username, Password) VALUES ('Banned', 'gay');
-INSERT INTO Users (Username, Password) VALUES ('Owo', 'gay');
-INSERT INTO Users (Username, Password, DeletionDate) VALUES ('Uwu', 'gay', 5841854158);
-
-SELECT * FROM Users WHERE DeletionDate < 5841854159;
-SELECT * FROM Users WHERE DeletionDate > 5841854159;
-
-INSERT INTO ChatsInfo (UserID, closed) VALUES (1, 0);
-INSERT INTO ChatsInfo (UserID, closed) VALUES (2, 0);
-
-INSERT INTO Chats (User, User2, LastMessageID) VALUES (1, 2, 0);
-
-INSERT INTO Messages (ChatID, UserID, Content)
-VALUES (1, 2, 'Hola');
-
-INSERT INTO Messages (ChatID, UserID, Content)
-VALUES (1, 2, '?');
-
-INSERT INTO Messages (ChatID, UserID, Content)
-VALUES (1, 1, 'quien chota sos?');
-

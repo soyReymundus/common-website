@@ -5,6 +5,12 @@ module.exports["users"] = Object.freeze({
     BANNED: 4
 });
 
+module.exports["usersPermissions"] = Object.freeze({
+    NONE: 1,
+    MODERATOR: 2,
+    ADMINISTRATOR: 3
+});
+
 module.exports["posts"] = Object.freeze({
     OK: 1,
     DELETED: 2,

@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
     );
 
     responseManager(req, res, responsesEnum.OK, {
-        "code": code
+        code
     });
 });
 

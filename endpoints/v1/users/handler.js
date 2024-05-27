@@ -12,6 +12,8 @@ const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
 router.param('user', async (req, res, next, user) => {
+    let query2Db = {};
+
     if (user.startsWith("@")) {
         user = user.slice(1);
 
@@ -28,13 +30,9 @@ router.param('user', async (req, res, next, user) => {
             return next();
         };
 
-        let u = await DBManager.find(DBTables.USERS, {
+        query2Db = {
             "Username": user
-        });
-
-        if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
-
-        req.user = u;
+        };
     } else {
         if (isNaN(parseInt(user))) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
 
@@ -44,14 +42,16 @@ router.param('user', async (req, res, next, user) => {
             return next();
         };
 
-        let u = await DBManager.find(DBTables.USERS, {
+        query2Db = {
             "ID": user
-        });
-
-        if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
-
-        req.user = u;
+        };
     };
+
+    let u = await DBManager.find(DBTables.USERS, query2Db);
+
+    if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
+
+    req.user = u;
 
     next();
 });
