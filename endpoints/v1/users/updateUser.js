@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const { Router } = require("express");
 const router = Router();
 const { createHash } = require("crypto");
+const parser = require('accept-language-parser');
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
 const DBTables = require("../../../constants/DBTables.js");
@@ -32,14 +33,14 @@ router.patch("/", async (req, res) => {
 
     if (req.me.Password != hashedPassword) return responseManager(req, res, responsesEnum.INCORRECT_PASSWORD);
 
-    if (body.birthdate){
+    if (body.birthdate) {
         if (typeof body.birthdate != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
         return responseManager(req, res, responsesEnum.UNAUTHORIZED);
 
         let now = new Date();
         let birthdate = new Date(body.birthdate);
-    
+
         if ((new Date(now - birthdate).getFullYear() - 1970) < parseInt(process.env["MINIMUM_AGE"])) {
             let difference = now - birthdate;
 
@@ -57,34 +58,73 @@ router.patch("/", async (req, res) => {
         updates["BirthDate"] = body.birthdate;
     };
 
+    if (body.language) {
+        if (!/^[a-zA-Z\-]+$/.test(body.language)) return responseManager(req, res, responsesEnum.INVALID_LANGUAGE);
+
+        let languagesArray = parser.parse(body.language);
+
+        if (languagesArray.length != 1) return responseManager(req, res, responsesEnum.INVALID_LANGUAGE);
+
+        switch (languagesArray[0].code) {
+            case "es":
+                straightLanguage = regionValidor(
+                    languagesArray[0].code,
+                    languagesArray[0].region,
+                    [undefined, "419", "ES"]
+                );
+                break;
+            case "en":
+                straightLanguage = regionValidor(
+                    languagesArray[0].code,
+                    languagesArray[0].region,
+                    [undefined, "US"]
+                );
+                break;
+            case "ja":
+                straightLanguage = regionValidor(
+                    languagesArray[0].code,
+                    languagesArray[0].region,
+                    [undefined, "JP"]
+                );
+                break;
+            default:
+                return responseManager(req, res, responsesEnum.NOT_AVAILABLE_LANGUAGE);
+                break;
+        };
+
+        if (!straightLanguage) responseManager(req, res, responsesEnum.NOT_AVAILABLE_LANGUAGE);
+
+        updates["LastName"] = straightLanguage;
+    };
+
     if (body.username) {
         if (3 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
 
         let usernameChecker = await DBManager.find(DBTables.USERS, {
             "Username": body.username
         });
-    
+
         if (usernameChecker != null) return responseManager(req, res, responsesEnum.USERNAME_USED);
-    
+
         updates["Username"] = body.username;
     };
 
     if (body.newPassword) {
         if (6 > body.newPassword.length || 64 < body.newPassword.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
-        
+
         updates["PasswordResets"] = req.user.PasswordResets + 1;
         updates["Password"] = body.newPassword;
     };
-    
+
     if (body.email) {
         if (body.email.length > 320 || !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(body.email)) return responseManager(req, res, responsesEnum.INVALID_EMAIL);
 
         let emailChecker = await DBManager.find(DBTables.USERS, {
             "Email": body.email
         });
-    
-        if (emailChecker != null) return responseManager(req, res, responsesEnum.EMAIL_USED);    
-        
+
+        if (emailChecker != null) return responseManager(req, res, responsesEnum.EMAIL_USED);
+
         updates["Status"] = statusEnum.users.NEED_ACTIONS;
         updates["EmailResets"] = req.user.EmailResets + 1;
         updates["Email"] = body.email;
@@ -100,7 +140,7 @@ router.patch("/", async (req, res) => {
             "WEBSITE": process.env["FRONTEND_SITE"]
         });
     };
-    
+
     if (body.displayName) {
         if (2 > body.displayName.length || 32 < body.displayName.length) return responseManager(req, res, responsesEnum.INVALID_DISPLAYNAME);
 
@@ -124,7 +164,7 @@ router.patch("/", async (req, res) => {
 
         updates["FirstName"] = body.firstName;
     };
-    
+
     if (body.photo) {
         if (body.photo) {
             //coming soon
@@ -144,8 +184,24 @@ router.patch("/", async (req, res) => {
     await DBManager.findAndUpdate(DBTables.USERS, {
         "ID": req.me.ID
     }, updates);
-    
+
     responseManager(req, res, responsesEnum.PROFILE_SUCCESSFULLY_UPDATED);
 });
 
 module.exports = router;
+
+/**
+ * 
+ * @param {string} region
+ * @param {string[]} regions 
+ * @returns 
+ */
+function regionValidor(language, region, regions) {
+    if (regions.includes(region)) {
+        if (!region) return language;
+
+        return `${language}-${region}`;
+    } else {
+        return;
+    };
+};

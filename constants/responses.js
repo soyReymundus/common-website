@@ -388,24 +388,24 @@ module.exports = {
         }
     },
     2015: {
-        "status": 409,
+        "status": 400,
         "message": {
-            "en": "You can't do that to yourself.",
-            "es": "No puedes hacer eso contigo mismo."
+            "en": "Invalid language.",
+            "es": "Idioma no válido."
         }
     },
     2016: {
-        "status": 400,
+        "status": 406,
         "message": {
-            "en": "Invalid relationship type.",
-            "es": "Tipo de relación no válida."
+            "en": "Language is not available.",
+            "es": "El idioma no está disponible."
         }
     },
     2017: {
-        "status": 403,
+        "status": 400,
         "message": {
-            "en": "You are blocked by the user.",
-            "es": "Estas bloqueado por la usuario."
+            "en": "Invalid image.",
+            "es": "Imagen inválida."
         }
     },
     2018: {
@@ -513,4 +513,25 @@ module.exports = {
             "es": "Usuario desbloqueado con éxito."
         }
     },
+    2033: {
+        "status": 409,
+        "message": {
+            "en": "You can't do that to yourself.",
+            "es": "No puedes hacer eso contigo mismo."
+        }
+    },
+    2034: {
+        "status": 400,
+        "message": {
+            "en": "Invalid relationship type.",
+            "es": "Tipo de relación no válida."
+        }
+    },
+    2035: {
+        "status": 403,
+        "message": {
+            "en": "You are blocked by the user.",
+            "es": "Estas bloqueado por la usuario."
+        }
+    }
 };

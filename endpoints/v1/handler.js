@@ -65,6 +65,8 @@ router.use((req, res, next) => {
                 if (!userCheck) return;
                 if (user.PasswordResets != decoded.serie) return responseManager(req, res, responsesEnum.INVALID_TOKEN);
                 if (user.DeletionDate) return responseManager(req, res, responsesEnum.SCHEDULED_DELETION);
+                
+                if (!user.Language) req.headers["accept-language"] = user.Language;
 
                 req.me = user;
 
