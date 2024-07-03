@@ -1,6 +1,8 @@
 module.exports = Object.freeze({
     USERS: 'Users',
     USERS_PUNISHMENTS: 'UsersPunishments',
+    USERS_FRIEND_REQUESTS: 'UsersFriendRequests',
+    USERS_FRIENDS: 'UsersFriends',
     USERS_BLOCKS: 'UsersBlocks',
     USERS_CODES: 'UsersCodes',
     CHATS_INFO: 'ChatsInfo',

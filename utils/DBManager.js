@@ -31,12 +31,14 @@ function create(table, query) {
  * 
  * @param {String} table 
  * @param {any} query 
- * @param {{}} config 
+ * @param {{ useOR: Boolean }} config 
  * @returns {any | any[]}
  */
-function findAndDetele(table, query, config = {}) {
+function findAndDetele(table, query, config = {
+    "useOR": false
+}) {
     return new Promise((resolve, reject) => {
-        let SQLquery = `DELETE ${table} ${SQLWhereGenerator(query)};`;
+        let SQLquery = `DELETE ${table} ${SQLWhereGenerator(query, config.useOR)};`;
 
         connection.query(SQLquery, (error, results, fields) => {
             if (error) return reject(error);
@@ -53,12 +55,14 @@ function findAndDetele(table, query, config = {}) {
  * @param {String} table 
  * @param {any} query 
  * @param {any} data 
- * @param {{}} config 
+ * @param {{ useOR: Boolean }} config 
  * @returns {any | any[]}
  */
-function findAndUpdate(table, query, data, config = {}) {
+function findAndUpdate(table, query, data, config = {
+    "useOR": false
+}) {
     return new Promise((resolve, reject) => {
-        let SQLquery = `UPDATE ${table} ${SQLSetGenerator(data)} ${SQLWhereGenerator(query)};`;
+        let SQLquery = `UPDATE ${table} ${SQLSetGenerator(data)} ${SQLWhereGenerator(query, config.useOR)};`;
 
         connection.query(SQLquery, (error, results, fields) => {
             if (error) return reject(error);
@@ -74,15 +78,19 @@ function findAndUpdate(table, query, data, config = {}) {
  * 
  * @param {String} table 
  * @param {any} query 
- * @param {{limit: Number, elements: String[]}} config 
+ * @param {{limit: Number, elements: String[], useOR: Boolean}} config 
  * @returns {any | any[]}
  */
 function find(table, query, config = {
     "limit": 1,
-    "elements": ["*"]
+    "elements": ["*"],
+    "useOR": false
 }) {
     return new Promise((resolve, reject) => {
-        let SQLquery = `SELECT ${config.elements.join(", ")} FROM ${table} ${SQLWhereGenerator(query)} LIMIT ${config.limit};`;
+        let SQLquery = `SELECT ${config.elements.join(", ")} FROM ${table} ${SQLWhereGenerator(query, config.useOR)}`;
+        if (config.limit > 0) SQLquery += ` LIMIT ${config.limit}`;
+
+        SQLquery += `;`;
 
         connection.query(SQLquery, (error, results, fields) => {
             if (error) return reject(error);
@@ -116,27 +124,10 @@ function SQLSetGenerator(data) {
 
     for (let index = 0; index < dataKeys.length; index++) {
         let dataKey = dataKeys[index];
-        let valueRaw = data[dataKey];
+        let rawValue = data[dataKey];
         let value;
 
-        switch (typeof valueRaw) {
-            case "string":
-                value = "'" + valueRaw + "'";
-                break;
-            case "number":
-                value = valueRaw.toString();
-                break;
-            case "boolean":
-                value = valueRaw ? "1" : "0";
-                break;
-            default:
-                if (valueRaw == null) {
-                    value = "NULL";
-                } else {
-                    value = "'" + valueRaw + "'";
-                };
-                break;
-        };
+        value = parseValues(rawValue);
 
         SQLdata.push(`${dataKey} = ${value}`);
     };
@@ -144,12 +135,33 @@ function SQLSetGenerator(data) {
     return `SET ${SQLdata.join(", ")}`;
 };
 
+function parseValues(rawValue) {
+    switch (typeof rawValue) {
+        case "string":
+            return connection.escape(rawValue);
+            break;
+        case "number":
+            return connection.escape(rawValue);
+            break;
+        case "boolean":
+            return rawValue ? 1 : 0;
+            break;
+        default:
+            if (rawValue == null) {
+                return "NULL";
+            } else {
+                return "'" + rawValue + "'";
+            };
+            break;
+    };
+};
+
 /**
  * 
  * @param {{}} query 
  * @returns {String}
  */
-function SQLWhereGenerator(query) {
+function SQLWhereGenerator(query, useOR = false) {
     if (typeof query == "undefined") return "";
     let queryKeys = Object.keys(query);
     let SQLQuerys = [];
@@ -158,8 +170,15 @@ function SQLWhereGenerator(query) {
         let queryKey = queryKeys[index];
         let queryValue = query[queryKey];
 
-        if (typeof queryValue == "string") queryValue = {
+        if (queryKey == "FROM") queryKey = "`FROM`";
+        if (queryKey == "TO") queryKey = "`TO`";
+
+        if (typeof queryValue == "string" || typeof queryValue == "number" || typeof queryValue == "bigint") queryValue = {
             "$eq": queryValue
+        };
+
+        if (typeof queryValue == "boolean") queryValue = {
+            "$eq": queryValue ? 1 : 0
         };
 
         let operators = Object.keys(queryValue);
@@ -185,7 +204,8 @@ function SQLWhereGenerator(query) {
         };
     };
 
-    return `WHERE ${SQLQuerys.join(" AND ")}`;
+    let operator = useOR ? "OR" : "AND";
+    return `WHERE ${SQLQuerys.join(` ${operator} `)}`;
 };
 
 
@@ -198,7 +218,9 @@ function SQLWhereGenerator(query) {
 function SQLValuesGenerator(query) {
     if (typeof query == "undefined") return "";
     let queryKeys = Object.keys(query);
-    let SQLValues = Object.values(query);
+    let SQLValues = Object.values(query).map((rawValue) => {
+        return parseValues(rawValue)
+    });
 
     return `(${queryKeys.join(", ")}) VALUES (${SQLValues.join(", ")})`;
 };

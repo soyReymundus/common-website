@@ -11,8 +11,8 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use(async (req, res, next) => {
-    if (req.method != "PATH" && req.method != "POST") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
+router.use((req, res, next) => {
+    if (req.method != "PATCH" && req.method != "POST") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
 
     next();
 });
@@ -39,8 +39,13 @@ router.post("/", async (req, res) => {
         { "expiresIn": "1h" }
     );
 
-    responseManager(req, res, responsesEnum.OK, {
-        code
+    responseManager(req, res, responsesEnum.CODE_SUCCESSFULLY_SENT);
+
+    EmailSender.send({
+        "to": body.email,
+        "from": emailResponses.PASSWORD_RESET.from,
+        "subject": emailResponses.PASSWORD_RESET.subject,
+        "html": emailResponses.PASSWORD_RESET.html.replace(/\%CODE\%/, code)
     });
 });
 
@@ -77,7 +82,7 @@ router.patch("/", async (req, res) => {
         if (code["Type"] != statusEnum["codes"].RESET) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
         let user = await DBManager.find(DBTables.USERS, {
-            "UserID": code.ID
+            "ID": code.ID
         });
 
         if (user == null) return responseManager(req, res, responsesEnum.INVALID_CODE);
@@ -91,7 +96,7 @@ router.patch("/", async (req, res) => {
             "Password": hashedPassword
         });
 
-        responseManager(req, res, responsesEnum.OK);
+        responseManager(req, res, responsesEnum.PASSWORD_RESET_SUCCESSFULLY);
     });
 });
 

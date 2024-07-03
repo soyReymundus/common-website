@@ -11,8 +11,8 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use(async (req, res, next) => {
-    if (req.method != "GET") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
+router.use((req, res, next) => {
+    if (req.method != "GET" && req.method != "HEAD" && req.method != "DELETE") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
 
     next();
 });
@@ -31,15 +31,53 @@ router.get("/", async (req, res) => {
         "lastName": req.user["LastName"]
     };
 
-    if (req.me.ID == req.user.ID) {
+    if (req.me && req.me.ID == req.user.ID) {
         user["email"] = req.user["Email"];
+
+        user["outcomingFriendRequests"] = (await DBManager.find(DBTables.USERS_FRIEND_REQUESTS, {
+            "FROM": req.me.ID
+        }, {
+            "elements": ["*"],
+            "limit": -1
+        })).map((fr) => {
+            return fr.TO
+        });
+
+        user["incomingFriendRequests"] = (await DBManager.find(DBTables.USERS_FRIEND_REQUESTS, {
+            "TO": req.me.ID
+        }, {
+            "elements": ["*"],
+            "limit": -1
+        })).map((fr) => {
+            return fr.FROM
+        });
+
+        user["blockedAccounts"] = (await DBManager.find(DBTables.USERS_BLOCKS, {
+            "FROM": req.me.ID
+        }, {
+            "elements": ["*"],
+            "limit": -1
+        })).map((fr) => {
+            return fr.TO
+        });
+
+        user["friends"] = (await DBManager.find(DBTables.USERS_FRIENDS, {
+            "User": req.me.ID,
+            "User2": req.me.ID
+        }, {
+            "elements": ["*"],
+            "limit": -1,
+            "useOR": true
+        })).map((friendship) => {
+            if (friendship.User == req.me.ID) {
+                return friendship.User2;
+            }else{
+                return friendship.User;
+            };
+        });
     };
 
-    if (req.me.Permissions == statusEnum.usersPermissions.ADMINISTRATOR) {
-        user["email"] = req.user["Email"];
-    };
-
-    responseManager(req, res, responsesEnum.OK, {
+    responseManager(req, res, responsesEnum.USER_SUCCESSFULLY_RETRIEVE, {
         user
     });
 });

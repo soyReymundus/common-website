@@ -13,7 +13,7 @@ router.use((req, res, next) => {
 
     if (!/(application|\*)\/(json|\*)/g.test(req.headers["accept"])) return responseManager(req, res, responsesEnum.UNACCEPTABLE_ACCEPT_HEADER);
 
-    if (req.method != "GET" && req.method != "DELETE") {
+    if (req.method != "GET" && req.method != "DELETE" && req.method != "HEAD" && req.method != "OPTIONS" && req.method != "TRACE") {
         if (!req.headers["content-type"]) return responseManager(req, res, responsesEnum.NOT_CONTENT_TYPE_HEADER);
 
         let contentType = req.headers["content-type"].replace(/ /g, "").split(";");
@@ -25,14 +25,14 @@ router.use((req, res, next) => {
 });
 
 router.use((req, res, next) => {
-    if (!req.headers["authorization"]) return;
+    if (!req.headers["authorization"]) return next();
 
     let rawToken = req.headers["authorization"].split(/ /g);
 
     let tokenSchema = rawToken[0];
     let token = rawToken.slice(1).join(" ");
 
-    switch (tokenSchema) {
+    switch (tokenSchema.toLocaleLowerCase()) {
         case "bearer":
             jwt.verify(token, process.env["JWT_KEY"], async (err, decoded) => {
                 if (err) {
@@ -67,21 +67,28 @@ router.use((req, res, next) => {
                 if (user.DeletionDate) return responseManager(req, res, responsesEnum.SCHEDULED_DELETION);
 
                 req.me = user;
+
+                next();
             });
             break;
         default:
             return responseManager(req, res, responsesEnum.INVALID_TOKEN_SCHEME);
             break;
-    }
-
-    next();
+    };
 });
 
 router.use(json());
 router.use("/auth", require("./auth/handler.js"));
+router.use("/users", require("./users/handler.js"));
+
+router.use((req, res, next) => {
+    if (req.method != "GET" && req.method != "HEAD") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
+
+    next();
+});
 
 //BLANK PAGE
-router.post("/", (req, res) => {
+router.get("/", (req, res) => {
     responseManager(req, res, responsesEnum.OK);
 });
 

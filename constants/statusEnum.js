@@ -11,6 +11,16 @@ module.exports["usersPermissions"] = Object.freeze({
     ADMINISTRATOR: 3
 });
 
+module.exports["usersRelationships"] = Object.freeze({
+    FRIEND_REQUEST: 1,
+    CANCEL_FRIEND_REQUEST: 2,
+    ACCEPT_FRIEND_REQUEST: 3,
+    REJECTED_FRIEND_REQUEST: 4,
+    DELETE_FRIEND: 5,
+    BLOCK: 6,
+    UNBLOCK: 7
+});
+
 module.exports["posts"] = Object.freeze({
     OK: 1,
     DELETED: 2,

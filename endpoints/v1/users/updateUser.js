@@ -11,7 +11,7 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use(async (req, res, next) => {
+router.use((req, res, next) => {
     if (req.method != "PATCH") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
 
     next();
@@ -58,7 +58,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.username) {
-        if (2 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
+        if (3 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
 
         let usernameChecker = await DBManager.find(DBTables.USERS, {
             "Username": body.username
@@ -70,7 +70,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.newPassword) {
-        if (2 > body.newPassword.length || 64 < body.newPassword.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
+        if (6 > body.newPassword.length || 64 < body.newPassword.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
         
         updates["PasswordResets"] = req.user.PasswordResets + 1;
         updates["Password"] = body.newPassword;
@@ -147,7 +147,7 @@ router.patch("/", async (req, res) => {
         "ID": req.me.ID
     }, updates);
     
-    responseManager(req, res, responsesEnum.EMAIL_VERIFICATION_REQUIRED);
+    responseManager(req, res, responsesEnum.PROFILE_SUCCESSFULLY_UPDATED);
 });
 
 module.exports = router;

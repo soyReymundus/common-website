@@ -122,10 +122,10 @@ CREATE TABLE Posts (
 
 CREATE TABLE UsersBlocks (
     ID int NOT NULL AUTO_INCREMENT,
-    FROM int NOT NULL,
-    TO int NOT NULL,
-    FOREIGN KEY (FROM) REFERENCES Users(ID),
-    FOREIGN KEY (TO) REFERENCES Users(ID),
+    `FROM` int NOT NULL,
+    `TO` int NOT NULL,
+    FOREIGN KEY (`FROM`) REFERENCES Users(ID),
+    FOREIGN KEY (`TO`) REFERENCES Users(ID),
     PRIMARY KEY (ID)
 );
 
@@ -140,10 +140,10 @@ CREATE TABLE UsersFriends (
 
 CREATE TABLE UsersFriendRequests (
     ID int NOT NULL AUTO_INCREMENT,
-    FROM int NOT NULL,
-    TO int NOT NULL,
-    FOREIGN KEY (FROM) REFERENCES Users(ID),
-    FOREIGN KEY (TO) REFERENCES Users(ID),
+    `FROM` int NOT NULL,
+    `TO` int NOT NULL,
+    FOREIGN KEY (`FROM`) REFERENCES Users(ID),
+    FOREIGN KEY (`TO`) REFERENCES Users(ID),
     PRIMARY KEY (ID)
 );
 
@@ -161,7 +161,7 @@ CREATE TABLE UsersPunishments (
 CREATE TABLE PostsOpinions (
     ID int NOT NULL AUTO_INCREMENT,
     PostID int NOT NULL,
-    Like BOOL NOT NULL,
+    IsLike BOOL NOT NULL,
     FOREIGN KEY (PostID) REFERENCES Posts(ID),
     PRIMARY KEY (ID)
 );

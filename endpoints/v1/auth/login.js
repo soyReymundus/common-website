@@ -11,7 +11,7 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use(async (req, res, next) => {
+router.use((req, res, next) => {
     if (req.method != "POST") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
 
     next();
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     let hashedPassword = createHash('sha256').update(body.password + process.env["PASSWORD_SALT"]).digest('hex');
 
     let user = await DBManager.find(DBTables.USERS, {
-        "Username": username,
+        "Username": body.username,
         "Password": hashedPassword
     });
 
@@ -43,25 +43,25 @@ router.post("/", async (req, res) => {
     }, process.env["JWT_KEY"]);
 
     if (!user.DeletionDate) {
-        responseManager(req, res, responsesEnum.OK, {
+        responseManager(req, res, responsesEnum.YOU_HAVE_SUCCESSFULLY_LOGIN, {
             token
         });
     } else {
-        if (typeof body.cancelDeletion != "undefined") return responseManager(req, res, responsesEnum.NOT_RECOVER_PARAM);
+        if (typeof body.cancelDeletion == "undefined") return responseManager(req, res, responsesEnum.NOT_RECOVER_PARAM);
         if (typeof body.cancelDeletion != "boolean") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
         if (body.cancelDeletion) {
-            let user = await DBManager.findAndUpdate(DBTables.USERS, {
+            await DBManager.findAndUpdate(DBTables.USERS, {
                 "ID": user.ID
             }, {
                 DeletionDate: null
             });
 
-            responseManager(req, res, responsesEnum.OK, {
+            responseManager(req, res, responsesEnum.LOGIN_AND_CANCELED_SCHEDULED_DELETION, {
                 token
             });
         } else {
-            if (typeof body.cancelDeletion != "undefined") return responseManager(req, res, responsesEnum.SCHEDULED_DELETION);
+            return responseManager(req, res, responsesEnum.SCHEDULED_DELETION);
         };
     };
 });

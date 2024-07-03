@@ -11,8 +11,8 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use(async (req, res, next) => {
-    if (req.method != "DELETE") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
+router.use((req, res, next) => {
+    if (req.method != "DELETE" && req.method != "PATCH") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
 
     next();
 });
@@ -30,7 +30,7 @@ router.delete("/", async (req, res) => {
         DeletionDate: schedule.getTime()
     });
 
-    return responseManager(req, res, responsesEnum.SUCCESSFUL_SCHEDULED_DELETION, {
+    return responseManager(req, res, responsesEnum.SUCCESSFULLY_SCHEDULED_DELETION, {
         "deletionDate": schedule.getTime()
     });
 });

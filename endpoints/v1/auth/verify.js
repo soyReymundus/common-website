@@ -11,8 +11,8 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use(async (req, res, next) => {
-    if (req.method != "PATH") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
+router.use((req, res, next) => {
+    if (req.method != "PATCH") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
 
     next();
 });
@@ -47,7 +47,7 @@ router.patch("/", async (req, res) => {
         if (code["Type"] != statusEnum["codes"].EMAIL) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
         let user = await DBManager.find(DBTables.USERS, {
-            "UserID": code.ID
+            "ID": code.ID
         });
 
         if (user == null) return responseManager(req, res, responsesEnum.INVALID_CODE);
@@ -61,7 +61,7 @@ router.patch("/", async (req, res) => {
             "EmailResets": user.EmailResets + 1
         });
 
-        responseManager(req, res, responsesEnum.OK);
+        responseManager(req, res, responsesEnum.EMAIL_SUCCESSFULLY_VALIDATED);
     });
 });
 
