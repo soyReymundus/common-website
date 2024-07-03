@@ -96,7 +96,8 @@ router.patch("/", async (req, res) => {
         }, process.env["JWT_KEY"]);
 
         emailManager.send(body.email, req.headers["accept-language"], emailResponses["EMAIL_CHANGED"], {
-            "CODE": code
+            "CODE": code,
+            "WEBSITE": process.env["FRONTEND_SITE"]
         });
     };
     

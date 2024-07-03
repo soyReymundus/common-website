@@ -42,7 +42,8 @@ router.post("/", async (req, res) => {
     responseManager(req, res, responsesEnum.CODE_SUCCESSFULLY_SENT);
 
     emailManager.send(body.email, req.headers["accept-language"], emailResponses["PASSWORD_RESET"], {
-        "CODE": code
+        "CODE": code,
+        "WEBSITE": process.env["FRONTEND_SITE"]
     });
 });
 

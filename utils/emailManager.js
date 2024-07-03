@@ -38,8 +38,8 @@ module.exports.send = (to, language, email,  data = null) => {
     const dataKey = dataKeys[index];
     let info = data[dataKey];
 
-    msg.subject.replace(`%${dataKey}%`, info);
-    msg.html.replace(`%${dataKey}%`, info);
+    msg.subject = msg.subject.replace(`%${dataKey}%`, info);
+    msg.html = msg.html.replace(`%${dataKey}%`, info);
   };
 
   transporter.sendMail({
