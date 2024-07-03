@@ -18,6 +18,13 @@ module.exports = (req, res, index, data = null) => {
     for (let index = 0; index < languages.length; index++) {
         const language = languages[index];
 
+        if (language.region) {
+            if (responseElement.message[language.code + "-" + language.region]) {
+                msg = responseElement.message[language.code + "-" + language.region];
+                break;
+            };
+        };
+
         if (!responseElement.message[language.code]) continue;
 
         msg = responseElement.message[language.code];

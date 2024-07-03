@@ -26,6 +26,13 @@ module.exports.send = (to, language, email,  data = null) => {
   for (let index = 0; index < languages.length; index++) {
     const language = languages[index];
 
+    if (language.region) {
+      if (email.message[language.code + "-" + language.region]) {
+          msg = email.message[language.code + "-" + language.region];
+          break;
+      };
+  };
+
     if (!email.message[language.code]) continue;
 
     msg = email.message[language.code];

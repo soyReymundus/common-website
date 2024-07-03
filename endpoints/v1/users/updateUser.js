@@ -27,8 +27,6 @@ router.patch("/", async (req, res) => {
     if (typeof body.password == "undefined") return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
     if (typeof body.password != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
-    if (Object.keys(body) == 1) return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
-
     let hashedPassword = createHash('sha256').update(body.password + process.env["PASSWORD_SALT"]).digest('hex');
 
     if (req.me.Password != hashedPassword) return responseManager(req, res, responsesEnum.INCORRECT_PASSWORD);
@@ -40,14 +38,19 @@ router.patch("/", async (req, res) => {
 
         let now = new Date();
         let birthdate = new Date(body.birthdate);
+        let difference = new Date(now - birthdate);
+        let minimunAge = parseInt(process.env["MINIMUM_AGE"]);
 
-        if ((new Date(now - birthdate).getFullYear() - 1970) < parseInt(process.env["MINIMUM_AGE"])) {
-            let difference = now - birthdate;
+        if (body.birthdate >= now.getTime()) return responseManager(req, res, responsesEnum.INVALID_BIRTHDATE);
+
+        if ((difference.getFullYear() - 1970) < minimunAge) {
+            let needTime = new Date()
+            needTime.setFullYear(needTime.getFullYear() + minimunAge);
 
             DBManager.create(DBTables.USERS_PUNISHMENTS, {
                 "LegalPunishment": false,
                 "Ended": false,
-                "Duration": difference,
+                "Duration": needTime.getTime(),
                 "Reason": "You are very young.",
                 "UserID": req.me.ID
             });
@@ -94,7 +97,7 @@ router.patch("/", async (req, res) => {
 
         if (!straightLanguage) responseManager(req, res, responsesEnum.NOT_AVAILABLE_LANGUAGE);
 
-        updates["LastName"] = straightLanguage;
+        updates["Language"] = straightLanguage;
     };
 
     if (body.username) {
@@ -180,6 +183,8 @@ router.patch("/", async (req, res) => {
 
         updates["Banner"] = body.banner;
     };
+
+    if (Object.keys(updates) == 0) return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
 
     await DBManager.findAndUpdate(DBTables.USERS, {
         "ID": req.me.ID

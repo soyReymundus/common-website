@@ -533,5 +533,12 @@ module.exports = {
             "en": "You are blocked by the user.",
             "es": "Estas bloqueado por la usuario."
         }
+    },
+    2036: {
+        "status": 409,
+        "message": {
+            "en": "Your date of birth cannot be older than the current date.",
+            "es": "Su fecha de nacimiento no puede ser anterior a la fecha actual."
+        }
     }
 };

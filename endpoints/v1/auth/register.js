@@ -24,6 +24,7 @@ router.post("/", async (req, res) => {
     if (typeof body.birthdate == "undefined" || typeof body.email == "undefined" || typeof body.username == "undefined" || typeof body.password == "undefined") return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
     if (typeof body.birthdate != "number" || typeof body.email != "string" || typeof body.username != "string" || typeof body.password != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
+    if (body.birthdate >= Date.now()) return responseManager(req, res, responsesEnum.INVALID_BIRTHDATE);
     if ((new Date(new Date() - new Date(body.birthdate)).getFullYear() - 1970) < parseInt(process.env["MINIMUM_AGE"])) return responseManager(req, res, responsesEnum.NOT_OLD_ENOUGH);
     if (3 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
     if (6 > body.password.length || 64 < body.password.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);

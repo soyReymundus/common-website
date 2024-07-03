@@ -30,7 +30,8 @@ module.exports = (req, res, user) => {
                         let resType = userPunishment.LegalPunishment == 1 ? responsesEnum.ILLEGAL_ACCOUNT : responsesEnum.BANNED_ACCOUNT;
 
                         responseManager(req, res, resType, {
-                            "reason": userPunishment.Reason
+                            "reason": userPunishment.Reason,
+                            "expires": userPunishment.Duration
                         });
                     };
 
