@@ -3,7 +3,7 @@ const { Router } = require("express");
 const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
-const EmailSender = require("../../../utils/EmailSender.js");
+const emailManager = require("../../../utils/emailManager.js");
 const DBTables = require("../../../constants/DBTables.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
@@ -94,12 +94,9 @@ router.patch("/", async (req, res) => {
             "Type": statusEnum["codes"].EMAIL,
             "serie": req.me.EmailResets
         }, process.env["JWT_KEY"]);
-    
-        EmailSender.send({
-            "to": body.email,
-            "from": emailResponses["EMAIL_CHANGED"].from,
-            "subject": emailResponses["EMAIL_CHANGED"].subject,
-            "html": emailResponses["EMAIL_CHANGED"].html.replace(/\%CODE\%/, code)
+
+        emailManager.send(body.email, req.headers["accept-language"], emailResponses["EMAIL_CHANGED"], {
+            "CODE": code
         });
     };
     

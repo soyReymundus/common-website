@@ -9,28 +9,32 @@ module.exports = {
         "status": 404,
         "message": {
             "en": "The endpoint does not exist.",
-            "es": "El endpoint no existe."
+            "es": "El endpoint no existe.",
+            "ja": "エンドポイントは存在しません。"
         }
     },
     2: {
         "status": 500,
         "message": {
             "en": "Internal server error, please try again later.",
-            "es": "Error interno del servidor, por favor intenta de nuevo mas tarde."
+            "es": "Error interno del servidor, por favor intenta de nuevo mas tarde.",
+            "ja": "サーバー内部エラーが発生しました。後でもう一度お試しください。"
         }
     },
     3: {
         "status": 422,
         "message": {
             "en": "One or more JSON parameters are missing. Please consult the documentation.",
-            "es": "Faltan uno o más parámetros JSON. Por favor consulte la documentación."
+            "es": "Faltan uno o más parámetros JSON. Por favor consulte la documentación.",
+            "ja": "1つ以上のJSONパラメータが欠落しています。ドキュメントを参照してください。"
         }
     },
     4: {
         "status": 422,
         "message": {
             "en": "One or more JSON parameters contains the wrong data type. Please consult the documentation.",
-            "es": "Uno o más parámetros JSON contienen el tipo de datos incorrecto. Por favor consulte la documentación."
+            "es": "Uno o más parámetros JSON contienen el tipo de datos incorrecto. Por favor consulte la documentación.",
+            "ja": "1つ以上のJSONパラメータに誤ったデータ型が含まれています。ドキュメントを参照してください。"
         }
     },
     5: {

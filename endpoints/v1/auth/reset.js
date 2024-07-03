@@ -3,7 +3,7 @@ const { Router } = require("express");
 const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
-const EmailSender = require("../../../utils/EmailSender.js");
+const emailManager = require("../../../utils/emailManager.js");
 const DBTables = require("../../../constants/DBTables.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
@@ -41,11 +41,8 @@ router.post("/", async (req, res) => {
 
     responseManager(req, res, responsesEnum.CODE_SUCCESSFULLY_SENT);
 
-    EmailSender.send({
-        "to": body.email,
-        "from": emailResponses.PASSWORD_RESET.from,
-        "subject": emailResponses.PASSWORD_RESET.subject,
-        "html": emailResponses.PASSWORD_RESET.html.replace(/\%CODE\%/, code)
+    emailManager.send(body.email, req.headers["accept-language"], emailResponses["PASSWORD_RESET"], {
+        "CODE": code
     });
 });
 

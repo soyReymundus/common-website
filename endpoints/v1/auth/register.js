@@ -3,7 +3,7 @@ const { Router } = require("express");
 const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
-const EmailSender = require("../../../utils/EmailSender.js");
+const emailManager = require("../../../utils/emailManager.js");
 const DBTables = require("../../../constants/DBTables.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
@@ -62,11 +62,9 @@ router.post("/", async (req, res) => {
         "serie": user.EmailResets
     }, process.env["JWT_KEY"]);
 
-    EmailSender.send({
-        "to": body.email,
-        "from": emailResponses.REGISTER.from,
-        "subject": emailResponses.REGISTER.subject,
-        "html": emailResponses.REGISTER.html.replace(/\%CODE\%/, code)
+    emailManager.send(body.email, req.headers["accept-language"], emailResponses["REGISTER"], {
+        "CODE": code,
+        "WEBSITE": process.env["FRONTEND_SITE"]
     });
 });
 
