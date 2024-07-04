@@ -68,6 +68,7 @@ CREATE TABLE Users (
     LastName varchar(255),
     FirstName varchar(255),
     BirthDate BIGINT,
+    UsernameCoolDown BIGINT DEFAULT 0,
     DeletionDate BIGINT,
     PRIMARY KEY (ID),
     FOREIGN KEY (Status) REFERENCES UserStatus(ID),

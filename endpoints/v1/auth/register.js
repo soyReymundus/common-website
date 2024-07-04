@@ -43,11 +43,14 @@ router.post("/", async (req, res) => {
     if (usernameChecker != null) return responseManager(req, res, responsesEnum.USERNAME_USED);
 
     let hashedPassword = createHash('sha256').update(body.password + process.env["PASSWORD_SALT"]).digest('hex');
+    let date = new Date();
+    let UsernameCoolDown = new Date(date.setMonth(date.getMonth() + 1));
 
     await DBManager.create(DBTables.USERS, {
         "Username": body.username,
         "Password": hashedPassword,
         "BirthDate": body.birthdate,
+        "UsernameCoolDown": UsernameCoolDown.getTime(),
         "Email": body.email
     });
 

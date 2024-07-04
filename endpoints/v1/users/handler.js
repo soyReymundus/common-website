@@ -50,6 +50,7 @@ router.param('user', async (req, res, next, user) => {
     let u = await DBManager.find(DBTables.USERS, query2Db);
 
     if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
+    if (u["Status"] == statusEnum.users["BANNED"] || u["Status"] == statusEnum.users["DELETED"]) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
 
     req.user = u;
 

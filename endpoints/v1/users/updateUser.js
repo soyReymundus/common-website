@@ -103,13 +103,21 @@ router.patch("/", async (req, res) => {
     if (body.username) {
         if (3 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
 
+        if (Date.now() <= req.user["UsernameCoolDown"]) return responseManager(req, res, responsesEnum.USERNAME_COOLDOWN, {
+            "expires": req.user["UsernameCoolDown"]
+        });
+
         let usernameChecker = await DBManager.find(DBTables.USERS, {
             "Username": body.username
         });
 
         if (usernameChecker != null) return responseManager(req, res, responsesEnum.USERNAME_USED);
 
+        let date = new Date();
+        let UsernameCoolDown = new Date(date.setMonth(date.getMonth() + 1));
+
         updates["Username"] = body.username;
+        updates["UsernameCoolDown"] = UsernameCoolDown.getTime();
     };
 
     if (body.newPassword) {

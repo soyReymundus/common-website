@@ -41,70 +41,80 @@ module.exports = {
         "status": 405,
         "message": {
             "en": "Method not allowed on this endpoint.",
-            "es": "Método no permitido en este endpoint."
+            "es": "Método no permitido en este endpoint.",
+            "ja": "このエンドポイントではメソッドは許可されていません。"
         }
     },
     6: {
         "status": 409,
         "message": {
             "en": "There is a conflict that the server can't handle.",
-            "es": "Hay un conflicto que el servidor no puede gestionar."
+            "es": "Hay un conflicto que el servidor no puede gestionar.",
+            "ja": "サーバーが処理できない競合があります。"
         }
     },
     100: {
         "status": 400,
         "message": {
             "en": "You must specify the \"Content-Type\" header.",
-            "es": "Debes especificar el encabezado \"Content-Type\"."
+            "es": "Debes especificar el encabezado \"Content-Type\".",
+            "ja": "\"Content-Type\"ヘッダーを指定する必要があります。"
         }
     },
     101: {
         "status": 415,
         "message": {
             "en": "The \"Content-Type\" header must especify \"application/json\".",
-            "es": "El encabezado \"Content-Type\" debe especificar \"application/json\"."
+            "es": "El encabezado \"Content-Type\" debe especificar \"application/json\".",
+            "ja": "\"Content-Type\"ヘッダーは\"application/json\"を指定する必要があります。"
         }
     },
     102: {
         "status": 400,
         "message": {
             "en": "You must specify the \"Accept\" header.",
-            "es": "Debes especificar el encabezado \"Accept\"."
+            "es": "Debes especificar el encabezado \"Accept\".",
+            "ja": "\"Accept\"ヘッダーを指定する必要があります。"
         }
     },
     103: {
         "status": 406,
         "message": {
             "en": "The \"Accept\" header must especify \"application/json\".",
-            "es": "El encabezado \"Accept\" debe especificar \"application/json\"."
+            "es": "El encabezado \"Accept\" debe especificar \"application/json\".",
+            "ja": "\"Accept\"ヘッダーは\"application/json\"を指定する必要があります。"
         }
     },
     104: {
         "status": 413,
         "message": {
             "en": "The request body is too large; the maximum length is 100 kb.",
-            "es": "El cuerpo de la solicitud es demasiado grande; la longitud máxima es 100 kb."
+            "es": "El cuerpo de la solicitud es demasiado grande; la longitud máxima es 100 kb.",
+            "ja": "リクエストの本文が大きすぎます。最大長は100 kbです。"
         }
     },
     105: {
         "status": 400,
         "message": {
             "en": "The request body is not valid JSON.",
-            "es": "El cuerpo de la solicitud no es un JSON válido."
+            "es": "El cuerpo de la solicitud no es un JSON válido.",
+            "ja": "リクエストの本文は有効なJSONではありません。"
         }
     },
     1000: {
         "status": 401,
         "message": {
             "en": "The username o password are incorrect. Try again.",
-            "es": "El nombre de usuario o la contraseña son incorrectos. Intentalo de nuevo."
+            "es": "El nombre de usuario o la contraseña son incorrectos. Intentalo de nuevo.",
+            "ja": "ユーザー名またはパスワードが正しくありません。再試行してください。"
         }
     },
     1001: {
         "status": 422,
         "message": {
             "en": "Account is scheduled for deletion, you must cancel it before logging in.",
-            "es": "La cuenta está programada para ser eliminada, debes cancelarla antes de iniciar sesión."
+            "es": "La cuenta está programada para ser eliminada, debes cancelarla antes de iniciar sesión.",
+            "ja": "アカウントは削除予定です。ログインする前にキャンセルする必要があります。"
         }
     },
     1002: {
@@ -539,6 +549,13 @@ module.exports = {
         "message": {
             "en": "Your date of birth cannot be older than the current date.",
             "es": "Su fecha de nacimiento no puede ser anterior a la fecha actual."
+        }
+    },
+    2037: {
+        "status": 403,
+        "message": {
+            "en": "You can't change your username because you need to wait a month.",
+            "es": "No puedes cambiar tu nombre de usuario porque necesitas esperar un mes."
         }
     }
 };

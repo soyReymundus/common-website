@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
         user["email"] = req.user["Email"];
 
         user["outcomingFriendRequests"] = (await DBManager.find(DBTables.USERS_FRIEND_REQUESTS, {
-            "FROM": req.me.ID
+            "FROM": req.user.ID
         }, {
             "elements": ["*"],
             "limit": -1
@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
         });
 
         user["incomingFriendRequests"] = (await DBManager.find(DBTables.USERS_FRIEND_REQUESTS, {
-            "TO": req.me.ID
+            "TO": req.user.ID
         }, {
             "elements": ["*"],
             "limit": -1
@@ -53,7 +53,7 @@ router.get("/", async (req, res) => {
         });
 
         user["blockedAccounts"] = (await DBManager.find(DBTables.USERS_BLOCKS, {
-            "FROM": req.me.ID
+            "FROM": req.user.ID
         }, {
             "elements": ["*"],
             "limit": -1
@@ -62,16 +62,16 @@ router.get("/", async (req, res) => {
         });
 
         user["friends"] = (await DBManager.find(DBTables.USERS_FRIENDS, {
-            "User": req.me.ID,
-            "User2": req.me.ID
+            "User": req.user.ID,
+            "User2": req.user.ID
         }, {
             "elements": ["*"],
             "limit": -1,
             "useOR": true
         })).map((friendship) => {
-            if (friendship.User == req.me.ID) {
+            if (friendship.User == req.user.ID) {
                 return friendship.User2;
-            }else{
+            } else {
                 return friendship.User;
             };
         });
