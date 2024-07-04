@@ -34,7 +34,8 @@ router.post("/", async (req, res) => {
     let code = jwt.sign({
         "ID": user.ID,
         "Type": statusEnum["codes"].RESET,
-        "serie": user.EmailResets
+        "serie": user.PasswordResets,
+        "serie2": user.EmailResets
     }, process.env["JWT_KEY"],
         { "expiresIn": "1h" }
     );
@@ -84,6 +85,10 @@ router.patch("/", async (req, res) => {
         });
 
         if (user == null) return responseManager(req, res, responsesEnum.INVALID_CODE);
+        
+        if (user.PasswordResets != code["serie"]) return responseManager(req, res, responsesEnum.INVALID_CODE);
+        if (user.EmailResets != code["serie1"]) return responseManager(req, res, responsesEnum.INVALID_CODE);
+
         if (user.Password == hashedPassword) return responseManager(req, res, responsesEnum.SAME_PASSWORD);
         if (user.Status != statusEnum.users.OK) return responseManager(req, res, responsesEnum.UNACCEPTABLE_ACCOUNT_STATUS);
 

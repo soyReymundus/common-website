@@ -60,7 +60,8 @@ router.post("/", async (req, res) => {
     let code = jwt.sign({
         "ID": user.ID,
         "Type": statusEnum["codes"].EMAIL,
-        "serie": user.EmailResets
+        "serie": user.PasswordResets,
+        "serie2": user.EmailResets
     }, process.env["JWT_KEY"]);
 
     emailManager.send(body.email, req.headers["accept-language"], emailResponses["REGISTER"], {

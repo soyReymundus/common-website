@@ -63,9 +63,10 @@ router.use((req, res, next) => {
                 let userCheck = await checkUserStatus(req, res, user);
 
                 if (!userCheck) return;
-                if (user.PasswordResets != decoded.serie) return responseManager(req, res, responsesEnum.INVALID_TOKEN);
+                if (decoded["serie"] != user.PasswordResets) return responseManager(req, res, responsesEnum.INVALID_TOKEN);
+                if (decoded["serie2"] != user.EmailResets) return responseManager(req, res, responsesEnum.INVALID_TOKEN);
                 if (user.DeletionDate) return responseManager(req, res, responsesEnum.SCHEDULED_DELETION);
-                
+
                 if (user.Language) req.headers["accept-language"] = user.Language;
 
                 req.me = user;

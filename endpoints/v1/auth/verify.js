@@ -51,7 +51,8 @@ router.patch("/", async (req, res) => {
         });
 
         if (user == null) return responseManager(req, res, responsesEnum.INVALID_CODE);
-        if (code["serie"] != user.EmailResets) return responseManager(req, res, responsesEnum.INVALID_CODE);
+        if (code["serie"] != user.PasswordResets) return responseManager(req, res, responsesEnum.INVALID_CODE);
+        if (code["serie2"] != user.EmailResets) return responseManager(req, res, responsesEnum.INVALID_CODE);
         if (user.Status != statusEnum.users.NEED_ACTIONS) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
         await DBManager.findAndUpdate(DBTables.USERS, {

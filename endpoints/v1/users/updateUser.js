@@ -29,7 +29,7 @@ router.patch("/", async (req, res) => {
 
     let hashedPassword = createHash('sha256').update(body.password + process.env["PASSWORD_SALT"]).digest('hex');
 
-    if (req.me.Password != hashedPassword) return responseManager(req, res, responsesEnum.INCORRECT_PASSWORD);
+    if (req.user.Password != hashedPassword) return responseManager(req, res, responsesEnum.INCORRECT_PASSWORD);
 
     if (body.birthdate) {
         if (typeof body.birthdate != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
@@ -52,7 +52,7 @@ router.patch("/", async (req, res) => {
                 "Ended": false,
                 "Duration": needTime.getTime(),
                 "Reason": "You are very young.",
-                "UserID": req.me.ID
+                "UserID": req.user.ID
             });
 
             updates["Status"] = statusEnum.users.BANNED;
@@ -62,7 +62,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.language) {
-        if (!/^[a-zA-Z\-]+$/.test(body.language)) return responseManager(req, res, responsesEnum.INVALID_LANGUAGE);
+        if (!/^[a-zA-Z0-9\-]+$/.test(body.language)) return responseManager(req, res, responsesEnum.INVALID_LANGUAGE);
 
         let languagesArray = parser.parse(body.language);
 
@@ -95,7 +95,7 @@ router.patch("/", async (req, res) => {
                 break;
         };
 
-        if (!straightLanguage) responseManager(req, res, responsesEnum.NOT_AVAILABLE_LANGUAGE);
+        if (!straightLanguage) return responseManager(req, res, responsesEnum.NOT_AVAILABLE_LANGUAGE);
 
         updates["Language"] = straightLanguage;
     };
@@ -115,8 +115,14 @@ router.patch("/", async (req, res) => {
     if (body.newPassword) {
         if (6 > body.newPassword.length || 64 < body.newPassword.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
 
-        updates["PasswordResets"] = req.user.PasswordResets + 1;
-        updates["Password"] = body.newPassword;
+        let hashedNewPassword = createHash('sha256').update(body.newPassword + process.env["PASSWORD_SALT"]).digest('hex');
+
+        if (hashedPassword == hashedNewPassword) return responseManager(req, res, responsesEnum.SAME_PASSWORD);
+
+        req.user.PasswordResets = req.user.PasswordResets + 1;
+
+        updates["PasswordResets"] = req.user.PasswordResets;
+        updates["Password"] = hashedNewPassword;
     };
 
     if (body.email) {
@@ -128,14 +134,17 @@ router.patch("/", async (req, res) => {
 
         if (emailChecker != null) return responseManager(req, res, responsesEnum.EMAIL_USED);
 
+        req.user.EmailResets = req.user.EmailResets + 1;
+
         updates["Status"] = statusEnum.users.NEED_ACTIONS;
-        updates["EmailResets"] = req.user.EmailResets + 1;
+        updates["EmailResets"] = req.user.EmailResets;
         updates["Email"] = body.email;
 
         let code = jwt.sign({
-            "ID": req.me.ID,
+            "ID": req.user.ID,
             "Type": statusEnum["codes"].EMAIL,
-            "serie": req.me.EmailResets
+            "serie": req.user.PasswordResets,
+            "serie2": req.user.EmailResets
         }, process.env["JWT_KEY"]);
 
         emailManager.send(body.email, req.headers["accept-language"], emailResponses["EMAIL_CHANGED"], {
@@ -187,7 +196,7 @@ router.patch("/", async (req, res) => {
     if (Object.keys(updates) == 0) return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
 
     await DBManager.findAndUpdate(DBTables.USERS, {
-        "ID": req.me.ID
+        "ID": req.user.ID
     }, updates);
 
     responseManager(req, res, responsesEnum.PROFILE_SUCCESSFULLY_UPDATED);

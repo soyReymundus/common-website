@@ -39,7 +39,8 @@ router.post("/", async (req, res) => {
 
     let token = jwt.sign({
         "ID": user.ID,
-        "serie": user.PasswordResets
+        "serie": user.PasswordResets,
+        "serie2": user.EmailResets
     }, process.env["JWT_KEY"]);
 
     if (!user.DeletionDate) {
