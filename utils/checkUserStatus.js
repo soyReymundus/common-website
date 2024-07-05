@@ -1,5 +1,5 @@
 const DBManager = require("../utils/DBManager.js");
-const DBTables = require("../constants/DBTables.js");
+const DBModels = require("../constants/DBModels.js");
 const statusEnum = require("../constants/statusEnum.js");
 const responsesEnum = require("../constants/responsesEnum.js");
 const responseManager = require("../utils/responseManager.js");
@@ -19,7 +19,7 @@ module.exports = (req, res, user) => {
                     resolve(false);
                     break;
                 case statusEnum.users.BANNED:
-                    let userPunishment = await DBManager.find(DBTables.USERS_PUNISHMENTS, {
+                    let userPunishment = await DBManager.find(DBModels.USERS_PUNISHMENTS, {
                         "UserID": user.ID,
                         "Ended": false
                     });

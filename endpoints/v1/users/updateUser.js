@@ -5,7 +5,7 @@ const { createHash } = require("crypto");
 const parser = require('accept-language-parser');
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -47,7 +47,7 @@ router.patch("/", async (req, res) => {
             let needTime = new Date()
             needTime.setFullYear(needTime.getFullYear() + minimunAge);
 
-            DBManager.create(DBTables.USERS_PUNISHMENTS, {
+            DBManager.create(DBModels.USERS_PUNISHMENTS, {
                 "LegalPunishment": false,
                 "Ended": false,
                 "Duration": needTime.getTime(),
@@ -107,7 +107,7 @@ router.patch("/", async (req, res) => {
             "expires": req.user["UsernameCoolDown"]
         });
 
-        let usernameChecker = await DBManager.find(DBTables.USERS, {
+        let usernameChecker = await DBManager.find(DBModels.USERS, {
             "Username": body.username
         });
 
@@ -136,7 +136,7 @@ router.patch("/", async (req, res) => {
     if (body.email) {
         if (body.email.length > 320 || !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(body.email)) return responseManager(req, res, responsesEnum.INVALID_EMAIL);
 
-        let emailChecker = await DBManager.find(DBTables.USERS, {
+        let emailChecker = await DBManager.find(DBModels.USERS, {
             "Email": body.email
         });
 
@@ -203,7 +203,7 @@ router.patch("/", async (req, res) => {
 
     if (Object.keys(updates) == 0) return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
 
-    await DBManager.findAndUpdate(DBTables.USERS, {
+    await DBManager.findAndUpdate(DBModels.USERS, {
         "ID": req.user.ID
     }, updates);
 

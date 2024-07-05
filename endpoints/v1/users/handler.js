@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -47,11 +47,11 @@ router.param('user', async (req, res, next, user) => {
         };
     };
 
-    let u = await DBManager.find(DBTables.USERS, query2Db);
+    let u = await DBManager.find(DBModels.USERS, query2Db);
 
     if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
     if (u["Status"] == statusEnum.users["BANNED"] || u["Status"] == statusEnum.users["DELETED"]) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
-
+    //
     req.user = u;
 
     next();

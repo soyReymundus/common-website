@@ -4,7 +4,7 @@ const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
     if (typeof body.email == "undefined") return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
     if (typeof body.email != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
-    let user = await DBManager.find(DBTables.USERS, {
+    let user = await DBManager.find(DBModels.USERS, {
         "Email": body.email
     });
 
@@ -80,7 +80,7 @@ router.patch("/", async (req, res) => {
 
         if (code["Type"] != statusEnum["codes"].RESET) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
-        let user = await DBManager.find(DBTables.USERS, {
+        let user = await DBManager.find(DBModels.USERS, {
             "ID": code.ID
         });
 
@@ -92,7 +92,7 @@ router.patch("/", async (req, res) => {
         if (user.Password == hashedPassword) return responseManager(req, res, responsesEnum.SAME_PASSWORD);
         if (user.Status != statusEnum.users.OK) return responseManager(req, res, responsesEnum.UNACCEPTABLE_ACCOUNT_STATUS);
 
-        await DBManager.findAndUpdate(DBTables.USERS, {
+        await DBManager.findAndUpdate(DBModels.USERS, {
             "ID": user.ID
         }, {
             "PasswordResets": user.PasswordResets + 1,

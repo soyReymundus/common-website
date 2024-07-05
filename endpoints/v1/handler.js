@@ -1,7 +1,7 @@
 const { Router, json } = require("express");
 const jwt = require('jsonwebtoken');
 const DBManager = require("../../utils/DBManager.js");
-const DBTables = require("../../constants/DBTables.js");
+const DBModels = require("../../constants/DBModels.js");
 const statusEnum = require("../../constants/statusEnum.js");
 const checkUserStatus = require("../../utils/checkUserStatus.js");
 const responseManager = require("../../utils/responseManager.js");
@@ -54,7 +54,7 @@ router.use((req, res, next) => {
                     }
                 };
 
-                let user = await DBManager.find(DBTables.USERS, {
+                let user = await DBManager.find(DBModels.USERS, {
                     "ID": decoded.ID
                 });
 

@@ -4,7 +4,7 @@ const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -24,7 +24,7 @@ router.delete("/", async (req, res) => {
     let date = new Date();
     let schedule = new Date(date.setMonth(date.getMonth() + 1));
 
-    await DBManager.findAndUpdate(DBTables.USERS, {
+    await DBManager.findAndUpdate(DBModels.USERS, {
         "ID": req.me.ID
     }, {
         DeletionDate: schedule.getTime()

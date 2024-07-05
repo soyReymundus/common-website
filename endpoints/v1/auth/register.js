@@ -4,7 +4,7 @@ const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -30,13 +30,13 @@ router.post("/", async (req, res) => {
     if (6 > body.password.length || 64 < body.password.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
     if (body.email.length > 320 || !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(body.email)) return responseManager(req, res, responsesEnum.INVALID_EMAIL);
 
-    let emailChecker = await DBManager.find(DBTables.USERS, {
+    let emailChecker = await DBManager.find(DBModels.USERS, {
         "Email": body.email
     });
 
     if (emailChecker != null) return responseManager(req, res, responsesEnum.EMAIL_USED);
 
-    let usernameChecker = await DBManager.find(DBTables.USERS, {
+    let usernameChecker = await DBManager.find(DBModels.USERS, {
         "Username": body.username
     });
 
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
     let date = new Date();
     let UsernameCoolDown = new Date(date.setMonth(date.getMonth() + 1));
 
-    await DBManager.create(DBTables.USERS, {
+    await DBManager.create(DBModels.USERS, {
         "Username": body.username,
         "Password": hashedPassword,
         "BirthDate": body.birthdate,
@@ -56,7 +56,7 @@ router.post("/", async (req, res) => {
 
     responseManager(req, res, responsesEnum.EMAIL_VERIFICATION_REQUIRED);
 
-    let user = await DBManager.find(DBTables.USERS, {
+    let user = await DBManager.find(DBModels.USERS, {
         "Username": body.username
     });
 

@@ -4,7 +4,7 @@ const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -36,19 +36,19 @@ router.post("/", async (req, res) => {
             if (await relationshipsChecker.checkFriendship(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.ALREADY_FRIENDS);
 
             if (await relationshipsChecker.checkFriendRequest(req.user.ID, req.me.ID)) {
-                await DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
+                await DBManager.findAndDetele(DBModels.USERS_FRIEND_REQUESTS, {
                     "FROM": req.user.ID,
                     "TO": req.me.ID
                 });
 
-                await DBManager.create(DBTables.USERS_FRIENDS, {
+                await DBManager.create(DBModels.USERS_FRIENDS, {
                     "User": order[0],
                     "User2": order[1]
                 });
 
                 responseManager(req, res, responsesEnum.FRIEND_REQUEST_SUCCESSFULLY_ACCEPTED);
             } else {
-                await DBManager.create(DBTables.USERS_FRIEND_REQUESTS, {
+                await DBManager.create(DBModels.USERS_FRIEND_REQUESTS, {
                     "FROM": req.me.ID,
                     "TO": req.user.ID
                 });
@@ -61,7 +61,7 @@ router.post("/", async (req, res) => {
 
             let order2 = [req.me.ID, req.user.ID].sort((a, b) => { return a - b });
 
-            await DBManager.findAndDetele(DBTables.USERS_FRIENDS, {
+            await DBManager.findAndDetele(DBModels.USERS_FRIENDS, {
                 "User": order2[0],
                 "User2": order2[1]
             });
@@ -72,12 +72,12 @@ router.post("/", async (req, res) => {
             if (await relationshipsChecker.checkFriendship(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.ALREADY_FRIENDS);
             if (!(await relationshipsChecker.checkFriendRequest(req.user.ID, req.me.ID))) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
 
-            await DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
+            await DBManager.findAndDetele(DBModels.USERS_FRIEND_REQUESTS, {
                 "FROM": req.user.ID,
                 "TO": req.me.ID
             });
 
-            await DBManager.create(DBTables.USERS_FRIENDS, {
+            await DBManager.create(DBModels.USERS_FRIENDS, {
                 "User": order[0],
                 "User2": order[1]
             });
@@ -89,7 +89,7 @@ router.post("/", async (req, res) => {
             if (await relationshipsChecker.checkFriendship(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.ALREADY_FRIENDS);
             if (!(await relationshipsChecker.checkFriendRequest(req.me.ID, req.user.ID))) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
 
-            await DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
+            await DBManager.findAndDetele(DBModels.USERS_FRIEND_REQUESTS, {
                 "FROM": req.me.ID,
                 "TO": req.user.ID
             });
@@ -101,7 +101,7 @@ router.post("/", async (req, res) => {
             if (await relationshipsChecker.checkFriendship(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.ALREADY_FRIENDS);
             if (!(await relationshipsChecker.checkFriendRequest(req.user.ID, req.me.ID))) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
 
-            await DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
+            await DBManager.findAndDetele(DBModels.USERS_FRIEND_REQUESTS, {
                 "FROM": req.user.ID,
                 "TO": req.me.ID
             });
@@ -112,24 +112,24 @@ router.post("/", async (req, res) => {
         case statusEnum.usersRelationships.BLOCK:
             if (await relationshipsChecker.checkBlock(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.YOU_HAVE_ALREADY_BLOCKED);
 
-            await DBManager.create(DBTables.USERS_BLOCKS, {
+            await DBManager.create(DBModels.USERS_BLOCKS, {
                 "FROM": req.me.ID,
                 "TO": req.user.ID
             });
 
             responseManager(req, res, responsesEnum.USER_SUCCESSFULLY_BLOCKED);
 
-            DBManager.findAndDetele(DBTables.USERS_FRIENDS, {
+            DBManager.findAndDetele(DBModels.USERS_FRIENDS, {
                 "User": order[0],
                 "User2": order[1]
             });
 
-            DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
+            DBManager.findAndDetele(DBModels.USERS_FRIEND_REQUESTS, {
                 "FROM": req.user.ID,
                 "TO": req.me.ID
             });
 
-            DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
+            DBManager.findAndDetele(DBModels.USERS_FRIEND_REQUESTS, {
                 "FROM": req.me.ID,
                 "TO": req.user.ID
             });
@@ -138,7 +138,7 @@ router.post("/", async (req, res) => {
         case statusEnum.usersRelationships.UNBLOCK:
             if (!(await relationshipsChecker.checkBlock(req.me.ID, req.user.ID))) return responseManager(req, res, responsesEnum.USER_NOT_BLOCKED);
 
-            await DBManager.findAndDetele(DBTables.USERS_BLOCKS, {
+            await DBManager.findAndDetele(DBModels.USERS_BLOCKS, {
                 "FROM": req.me.ID,
                 "TO": req.user.ID
             });

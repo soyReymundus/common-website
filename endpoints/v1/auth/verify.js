@@ -4,7 +4,7 @@ const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -46,7 +46,7 @@ router.patch("/", async (req, res) => {
 
         if (code["Type"] != statusEnum["codes"].EMAIL) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
-        let user = await DBManager.find(DBTables.USERS, {
+        let user = await DBManager.find(DBModels.USERS, {
             "ID": code.ID
         });
 
@@ -55,7 +55,7 @@ router.patch("/", async (req, res) => {
         if (code["serie2"] != user.EmailResets) return responseManager(req, res, responsesEnum.INVALID_CODE);
         if (user.Status != statusEnum.users.NEED_ACTIONS) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
-        await DBManager.findAndUpdate(DBTables.USERS, {
+        await DBManager.findAndUpdate(DBModels.USERS, {
             "ID": user.ID
         }, {
             "Status": statusEnum.users.OK,

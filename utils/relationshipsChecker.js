@@ -1,5 +1,5 @@
 const DBManager = require("../utils/DBManager.js");
-const DBTables = require("../constants/DBTables.js");
+const DBModels = require("../constants/DBModels.js");
 const statusEnum = require("../constants/statusEnum.js");
 const responsesEnum = require("../constants/responsesEnum.js");
 const responseManager = require("../utils/responseManager.js");
@@ -7,7 +7,7 @@ const responseManager = require("../utils/responseManager.js");
 function checkBlock(from, to) {
     return new Promise(async (resolve, reject) => {
         try {
-            let block = await DBManager.find(DBTables.USERS_BLOCKS, {
+            let block = await DBManager.find(DBModels.USERS_BLOCKS, {
                 "FROM": from,
                 "TO": to
             });
@@ -26,7 +26,7 @@ function checkBlock(from, to) {
 function checkFriendRequest(from, to) {
     return new Promise(async (resolve, reject) => {
         try {
-            let req = await DBManager.find(DBTables.USERS_FRIEND_REQUESTS, {
+            let req = await DBManager.find(DBModels.USERS_FRIEND_REQUESTS, {
                 "FROM": from,
                 "TO": to
             });
@@ -45,7 +45,7 @@ function checkFriendRequest(from, to) {
 function checkFriendRequest(from, to) {
     return new Promise(async (resolve, reject) => {
         try {
-            let req = await DBManager.find(DBTables.USERS_FRIEND_REQUESTS, {
+            let req = await DBManager.find(DBModels.USERS_FRIEND_REQUESTS, {
                 "FROM": from,
                 "TO": to
             });
@@ -66,7 +66,7 @@ function checkFriendship(user, user2) {
         try {
             let order = [user, user2].sort((a, b) => { return a - b });
 
-            let req = await DBManager.find(DBTables.USERS_FRIENDS, {
+            let req = await DBManager.find(DBModels.USERS_FRIENDS, {
                 "User": order[0],
                 "User2": order[1]
             });

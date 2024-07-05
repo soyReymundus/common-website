@@ -4,7 +4,7 @@ const router = Router();
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
-const DBTables = require("../../../constants/DBTables.js");
+const DBModels = require("../../../constants/DBModels.js");
 const statusEnum = require("../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
@@ -26,9 +26,11 @@ router.post("/", async (req, res) => {
 
     let hashedPassword = createHash('sha256').update(body.password + process.env["PASSWORD_SALT"]).digest('hex');
 
-    let user = await DBManager.find(DBTables.USERS, {
-        "Username": body.username,
-        "Password": hashedPassword
+    let user = await DBModels.users.findOne({
+        "where": {
+            "Username": body.username,
+            "Password": hashedPassword
+        }
     });
 
     if (user == null) return responseManager(req, res, responsesEnum.INVALID_USERNAME_OR_PASSWORD);
@@ -52,11 +54,8 @@ router.post("/", async (req, res) => {
         if (typeof body.cancelDeletion != "boolean") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
         if (body.cancelDeletion) {
-            await DBManager.findAndUpdate(DBTables.USERS, {
-                "ID": user.ID
-            }, {
-                DeletionDate: null
-            });
+            user.DeletionDate = null;
+            await user.save();
 
             responseManager(req, res, responsesEnum.LOGIN_AND_CANCELED_SCHEDULED_DELETION, {
                 token
