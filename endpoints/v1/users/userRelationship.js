@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     if (req.me.ID == req.user.ID) return responseManager(req, res, responsesEnum.RELATIONSHIP_CONFLICT);
 
     switch (body.type) {
-        case statusEnum.usersRelationships.FRIEND_REQUEST:
+        case statusEnum.usersRelationships.SEND_FRIEND_REQUEST:
             if (await relationshipsChecker.checkBlock(req.user.ID, req.me.ID)) return responseManager(req, res, responsesEnum.YOU_ARE_BLOCKED);
             if (await relationshipsChecker.checkBlock(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.YOU_HAVE_BLOCKED);
             if (await relationshipsChecker.checkFriendRequest(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_ALREADY_SENT);
@@ -70,7 +70,7 @@ router.post("/", async (req, res) => {
             break;
         case statusEnum.usersRelationships.ACCEPT_FRIEND_REQUEST:
             if (await relationshipsChecker.checkFriendship(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.ALREADY_FRIENDS);
-            if (await relationshipsChecker.checkFriendRequest(req.user.ID, req.me.ID)) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
+            if (!(await relationshipsChecker.checkFriendRequest(req.user.ID, req.me.ID))) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
 
             await DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
                 "FROM": req.user.ID,
@@ -87,7 +87,7 @@ router.post("/", async (req, res) => {
             break;
         case statusEnum.usersRelationships.CANCEL_FRIEND_REQUEST:
             if (await relationshipsChecker.checkFriendship(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.ALREADY_FRIENDS);
-            if (await relationshipsChecker.checkFriendRequest(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
+            if (!(await relationshipsChecker.checkFriendRequest(req.me.ID, req.user.ID))) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
 
             await DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
                 "FROM": req.me.ID,
@@ -99,7 +99,7 @@ router.post("/", async (req, res) => {
             break;
         case statusEnum.usersRelationships.REJECTED_FRIEND_REQUEST:
             if (await relationshipsChecker.checkFriendship(req.me.ID, req.user.ID)) return responseManager(req, res, responsesEnum.ALREADY_FRIENDS);
-            if (await relationshipsChecker.checkFriendRequest(req.user.ID, req.me.ID)) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
+            if (!(await relationshipsChecker.checkFriendRequest(req.user.ID, req.me.ID))) return responseManager(req, res, responsesEnum.FRIEND_REQUEST_DOES_NOT_EXIST);
 
             await DBManager.findAndDetele(DBTables.USERS_FRIEND_REQUESTS, {
                 "FROM": req.user.ID,

@@ -73,6 +73,7 @@ CREATE TABLE Users (
     PRIMARY KEY (ID),
     FOREIGN KEY (Status) REFERENCES UserStatus(ID),
     FOREIGN KEY (Permissions) REFERENCES UserPermissions(ID),
+    UNIQUE (Email)
     UNIQUE (Username)
 );
 

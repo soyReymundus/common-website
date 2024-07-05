@@ -66,7 +66,7 @@ function checkFriendship(user, user2) {
         try {
             let order = [user, user2].sort((a, b) => { return a - b });
 
-            await DBManager.find(DBTables.USERS_FRIENDS, {
+            let req = await DBManager.find(DBTables.USERS_FRIENDS, {
                 "User": order[0],
                 "User2": order[1]
             });

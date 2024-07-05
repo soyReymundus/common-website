@@ -16,7 +16,7 @@ var connection = mysql.createPool({
  */
 function create(table, query) {
     return new Promise((resolve, reject) => {
-        let SQLquery = `INSERT INTO ${table} ${SQLValuesGenerator(query)};`;
+        let SQLquery = `INSERT INTO ${table} ${SQLValuesGenerator(query, table)};`;
 
         connection.query(SQLquery, (error, results, fields) => {
             if (error) return reject(error);
@@ -38,7 +38,7 @@ function findAndDetele(table, query, config = {
     "useOR": false
 }) {
     return new Promise((resolve, reject) => {
-        let SQLquery = `DELETE ${table} ${SQLWhereGenerator(query, config.useOR)};`;
+        let SQLquery = `DELETE FROM ${table} ${SQLWhereGenerator(query, table, config.useOR)};`;
 
         connection.query(SQLquery, (error, results, fields) => {
             if (error) return reject(error);
@@ -62,7 +62,7 @@ function findAndUpdate(table, query, data, config = {
     "useOR": false
 }) {
     return new Promise((resolve, reject) => {
-        let SQLquery = `UPDATE ${table} ${SQLSetGenerator(data)} ${SQLWhereGenerator(query, config.useOR)};`;
+        let SQLquery = `UPDATE ${table} ${SQLSetGenerator(data)} ${SQLWhereGenerator(query, table, config.useOR)};`;
 
         connection.query(SQLquery, (error, results, fields) => {
             if (error) return reject(error);
@@ -87,7 +87,7 @@ function find(table, query, config = {
     "useOR": false
 }) {
     return new Promise((resolve, reject) => {
-        let SQLquery = `SELECT ${config.elements.join(", ")} FROM ${table} ${SQLWhereGenerator(query, config.useOR)}`;
+        let SQLquery = `SELECT ${config.elements.join(", ")} FROM ${table} ${SQLWhereGenerator(query, table, config.useOR)}`;
         if (config.limit > 0) SQLquery += ` LIMIT ${config.limit}`;
 
         SQLquery += `;`;
@@ -161,7 +161,7 @@ function parseValues(rawValue) {
  * @param {{}} query 
  * @returns {String}
  */
-function SQLWhereGenerator(query, useOR = false) {
+function SQLWhereGenerator(query, table, useOR = false) {
     if (typeof query == "undefined") return "";
     let queryKeys = Object.keys(query);
     let SQLQuerys = [];
@@ -170,8 +170,8 @@ function SQLWhereGenerator(query, useOR = false) {
         let queryKey = queryKeys[index];
         let queryValue = query[queryKey];
 
-        if (queryKey == "FROM") queryKey = "`FROM`";
-        if (queryKey == "TO") queryKey = "`TO`";
+        queryKey = table + "." + queryKey;
+
 
         if (typeof queryValue == "string" || typeof queryValue == "number" || typeof queryValue == "bigint") queryValue = {
             "$eq": queryValue
@@ -215,9 +215,11 @@ function SQLWhereGenerator(query, useOR = false) {
  * @param {any} query 
  * @returns {String}
  */
-function SQLValuesGenerator(query) {
+function SQLValuesGenerator(query, table) {
     if (typeof query == "undefined") return "";
-    let queryKeys = Object.keys(query);
+    let queryKeys = Object.keys(query).map((key) => {
+        return table + "." + key;
+    });
     let SQLValues = Object.values(query).map((rawValue) => {
         return parseValues(rawValue)
     });

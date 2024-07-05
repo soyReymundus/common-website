@@ -57,10 +57,10 @@ router.param('user', async (req, res, next, user) => {
     next();
 });
 
+router.use("/:user/relationship", require("./userRelationship.js"));
 router.use("/:user", require("./getUser.js"));
 router.use("/:user", require("./deleteUser.js"));
 router.use("/:user", require("./updateUser.js"));
-router.use("/:user/relationship", require("./userRelationship.js"));
 
 router.use((req, res, next) => {
     if (req.method != "GET" && req.method != "HEAD") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
