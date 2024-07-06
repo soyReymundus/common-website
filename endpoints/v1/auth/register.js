@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { Router } = require("express");
 const router = Router();
+const { Op } = require('sequelize');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
@@ -30,14 +31,18 @@ router.post("/", async (req, res) => {
     if (6 > body.password.length || 64 < body.password.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
     if (body.email.length > 320 || !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(body.email)) return responseManager(req, res, responsesEnum.INVALID_EMAIL);
 
-    let emailChecker = await DBManager.find(DBModels.USERS, {
-        "Email": body.email
+    let emailChecker = await DBModels.users.findOne({
+        "where": {
+            "Email": body.email
+        }
     });
 
     if (emailChecker != null) return responseManager(req, res, responsesEnum.EMAIL_USED);
 
-    let usernameChecker = await DBManager.find(DBModels.USERS, {
-        "Username": body.username
+    let usernameChecker = await DBModels.users.findOne({
+        "where": {
+            "Username": body.username
+        }
     });
 
     if (usernameChecker != null) return responseManager(req, res, responsesEnum.USERNAME_USED);
@@ -46,7 +51,7 @@ router.post("/", async (req, res) => {
     let date = new Date();
     let UsernameCoolDown = new Date(date.setMonth(date.getMonth() + 1));
 
-    await DBManager.create(DBModels.USERS, {
+    await DBModels.users.create({
         "Username": body.username,
         "Password": hashedPassword,
         "BirthDate": body.birthdate,
@@ -56,8 +61,10 @@ router.post("/", async (req, res) => {
 
     responseManager(req, res, responsesEnum.EMAIL_VERIFICATION_REQUIRED);
 
-    let user = await DBManager.find(DBModels.USERS, {
-        "Username": body.username
+    let user = await await DBModels.users.findOne({
+        "where": {
+            "Username": body.username
+        }
     });
 
     let code = jwt.sign({

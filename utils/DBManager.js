@@ -4,7 +4,7 @@ const sequelize = new Sequelize(process.env["MYSQL_DATABASE"], process.env["MYSQ
     host: process.env["MYSQL_HOST"],
     port: process.env["MYSQL_PORT"],
     pool: {
-        "max": process.env["MYSQL_CONNECTION_LIMIT"]
+        "max": parseInt(process.env["MYSQL_CONNECTION_LIMIT"])
     },
     dialect: 'mysql'
 });

@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const DBManager = require("./DBManager.js");
 const DBModels = require("../constants/DBModels.js");
 
@@ -20,40 +21,37 @@ module.exports.user = (user, privilegedData) => {
             if (privilegedData) {
                 info["email"] = user["Email"];
 
-                info["outcomingFriendRequests"] = (await DBManager.find(DBModels.USERS_FRIEND_REQUESTS, {
-                    "FROM": info.ID
-                }, {
-                    "elements": ["*"],
-                    "limit": -1
+                info["outcomingFriendRequests"] = (await DBModels.usersFriendRequests.findAll({
+                    "where": {
+                        "FROM": info.ID
+                    }
                 })).map((fr) => {
                     return fr.TO
                 });
 
-                info["incomingFriendRequests"] = (await DBManager.find(DBModels.USERS_FRIEND_REQUESTS, {
-                    "TO": info.ID
-                }, {
-                    "elements": ["*"],
-                    "limit": -1
+                info["incomingFriendRequests"] = (await DBModels.usersFriendRequests.findAll({
+                    "where": {
+                        "TO": info.ID
+                    }
                 })).map((fr) => {
                     return fr.FROM
                 });
 
-                info["blockedAccounts"] = (await DBManager.find(DBModels.USERS_BLOCKS, {
-                    "FROM": info.ID
-                }, {
-                    "elements": ["*"],
-                    "limit": -1
+                info["blockedAccounts"] = (await DBModels.usersBlocks.findAll({
+                    "WHERE": {
+                        "FROM": info.ID
+                    }
                 })).map((fr) => {
                     return fr.TO
                 });
 
-                info["friends"] = (await DBManager.find(DBModels.USERS_FRIENDS, {
-                    "User": info.ID,
-                    "User2": info.ID
-                }, {
-                    "elements": ["*"],
-                    "limit": -1,
-                    "useOR": true
+                info["friends"] = (await DBModels.usersFriends.findAll({
+                    "WHERE": {
+                        [Op.or]: [
+                            { User: info.ID },
+                            { User2: info.ID }
+                        ]
+                    }
                 })).map((friendship) => {
                     if (friendship.User == info.ID) {
                         return friendship.User2;
@@ -62,7 +60,6 @@ module.exports.user = (user, privilegedData) => {
                     };
                 });
             };
-
             resolve(info);
         } catch (e) {
             reject(e);

@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
@@ -47,7 +48,9 @@ router.param('user', async (req, res, next, user) => {
         };
     };
 
-    let u = await DBManager.find(DBModels.USERS, query2Db);
+    let u = await DBModels.users.findOne({
+        "where": query2Db
+    });
 
     if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
     if (u["Status"] == statusEnum.users["BANNED"] || u["Status"] == statusEnum.users["DELETED"]) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { Router } = require("express");
 const router = Router();
+const { Op } = require('sequelize');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
@@ -24,8 +25,10 @@ router.post("/", async (req, res) => {
     if (typeof body.email == "undefined") return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
     if (typeof body.email != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
-    let user = await DBManager.find(DBModels.USERS, {
-        "Email": body.email
+    let user = await DBModels.users.findOne({
+        "where": {
+            "Email": body.email
+        }
     });
 
     if (user == null) return responseManager(req, res, responsesEnum.EMAIL_NOT_USED);
@@ -80,8 +83,10 @@ router.patch("/", async (req, res) => {
 
         if (code["Type"] != statusEnum["codes"].RESET) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
-        let user = await DBManager.find(DBModels.USERS, {
-            "ID": code.ID
+        let user = await DBModels.users.findOne({
+            "where": {
+                "ID": code.ID
+            }
         });
 
         if (user == null) return responseManager(req, res, responsesEnum.INVALID_CODE);
@@ -92,12 +97,9 @@ router.patch("/", async (req, res) => {
         if (user.Password == hashedPassword) return responseManager(req, res, responsesEnum.SAME_PASSWORD);
         if (user.Status != statusEnum.users.OK) return responseManager(req, res, responsesEnum.UNACCEPTABLE_ACCOUNT_STATUS);
 
-        await DBManager.findAndUpdate(DBModels.USERS, {
-            "ID": user.ID
-        }, {
-            "PasswordResets": user.PasswordResets + 1,
-            "Password": hashedPassword
-        });
+        user.PasswordResets = user.PasswordResets + 1;
+        user.Password = hashedPassword;
+        await user.save();
 
         responseManager(req, res, responsesEnum.PASSWORD_RESET_SUCCESSFULLY);
     });

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { Router } = require("express");
 const router = Router();
+const { Op } = require('sequelize');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const extractInfo = require("../../../utils/extractInfo.js");

@@ -1,4 +1,5 @@
 const sequelize = require("../utils/DBManager.js");
+const { DataTypes } = require("sequelize");
 
 module.exports = Object.freeze({
     users: sequelize.define('Users', {
@@ -128,7 +129,7 @@ module.exports = Object.freeze({
         tableName: 'UsersPunishments',
         timestamps: false
     }),
-    UsersFriendRequests: sequelize.define('UsersFriendRequests', {
+    usersFriendRequests: sequelize.define('UsersFriendRequests', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -154,7 +155,7 @@ module.exports = Object.freeze({
         tableName: 'UsersFriendRequests',
         timestamps: false
     }),
-    UsersFriends: sequelize.define('UsersFriends', {
+    usersFriends: sequelize.define('UsersFriends', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -180,7 +181,7 @@ module.exports = Object.freeze({
         tableName: 'UsersFriends',
         timestamps: false
     }),
-    UsersBlocks: sequelize.define('UsersBlocks', {
+    usersBlocks: sequelize.define('UsersBlocks', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -206,7 +207,7 @@ module.exports = Object.freeze({
         tableName: 'UsersBlocks',
         timestamps: false
     }),
-    ChatsInfo: sequelize.define('ChatsInfo', {
+    chatsInfo: sequelize.define('ChatsInfo', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -233,7 +234,7 @@ module.exports = Object.freeze({
         tableName: 'ChatsInfo',
         timestamps: false
     }),
-    Chats: sequelize.define('Chats', {
+    chats: sequelize.define('Chats', {
         ID: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -274,7 +275,7 @@ module.exports = Object.freeze({
         tableName: 'Chats',
         timestamps: false
     }),
-    ChatsPunishments: sequelize.define('ChatsPunishments', {
+    chatsPunishments: sequelize.define('ChatsPunishments', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -304,7 +305,7 @@ module.exports = Object.freeze({
         tableName: 'ChatsPunishments',
         timestamps: false
     }),
-    Message: sequelize.define('Messages', {
+    message: sequelize.define('Messages', {
         ID: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -339,7 +340,7 @@ module.exports = Object.freeze({
         tableName: 'Messages',
         timestamps: false
     }),
-    Posts: sequelize.define('Posts', {
+    posts: sequelize.define('Posts', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -382,7 +383,7 @@ module.exports = Object.freeze({
         tableName: 'Posts',
         timestamps: false
     }),
-    PostsPunishments: sequelize.define('PostsPunishments', {
+    postsPunishments: sequelize.define('PostsPunishments', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -412,7 +413,7 @@ module.exports = Object.freeze({
         tableName: 'PostsPunishments',
         timestamps: false
     }),
-    PostsOpinions: sequelize.define('PostsOpinions', {
+    postsOpinions: sequelize.define('PostsOpinions', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,

@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");

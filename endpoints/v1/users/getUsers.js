@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
     //Username
     //Description
 
-    DBManager.find(DBModels.USERS, {
+    /*DBManager.find(DBModels.USERS, {
         "ID": [{
             "$unequal": 1
         }, {
@@ -36,7 +36,7 @@ router.get("/", async (req, res) => {
         "elements": ["*"],
         "limit": -1,
         "useOR": false
-    })
+    })*/
 
     let privilege = (req.me && req.me.ID == req.user.ID);
     

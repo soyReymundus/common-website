@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { Router } = require("express");
 const router = Router();
+const { Op } = require('sequelize');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
@@ -46,8 +47,10 @@ router.patch("/", async (req, res) => {
 
         if (code["Type"] != statusEnum["codes"].EMAIL) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
-        let user = await DBManager.find(DBModels.USERS, {
-            "ID": code.ID
+        let user = await DBModels.users.findOne({
+            "where": {
+                "ID": code.ID
+            }
         });
 
         if (user == null) return responseManager(req, res, responsesEnum.INVALID_CODE);
@@ -55,12 +58,9 @@ router.patch("/", async (req, res) => {
         if (code["serie2"] != user.EmailResets) return responseManager(req, res, responsesEnum.INVALID_CODE);
         if (user.Status != statusEnum.users.NEED_ACTIONS) return responseManager(req, res, responsesEnum.INVALID_CODE);
 
-        await DBManager.findAndUpdate(DBModels.USERS, {
-            "ID": user.ID
-        }, {
-            "Status": statusEnum.users.OK,
-            "EmailResets": user.EmailResets + 1
-        });
+        user.Status = statusEnum.users.OK;
+        user.EmailResets = user.EmailResets + 1;
+        await user.save();
 
         responseManager(req, res, responsesEnum.EMAIL_SUCCESSFULLY_VALIDATED);
     });

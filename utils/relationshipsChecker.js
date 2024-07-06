@@ -1,4 +1,5 @@
 const DBManager = require("../utils/DBManager.js");
+const { Op } = require('sequelize');
 const DBModels = require("../constants/DBModels.js");
 const statusEnum = require("../constants/statusEnum.js");
 const responsesEnum = require("../constants/responsesEnum.js");
@@ -7,9 +8,11 @@ const responseManager = require("../utils/responseManager.js");
 function checkBlock(from, to) {
     return new Promise(async (resolve, reject) => {
         try {
-            let block = await DBManager.find(DBModels.USERS_BLOCKS, {
-                "FROM": from,
-                "TO": to
+            let block = await DBModels.usersBlocks.findOne({
+                "where": {
+                    "FROM": from,
+                    "TO": to
+                }
             });
 
             if (block == null) {
@@ -26,9 +29,11 @@ function checkBlock(from, to) {
 function checkFriendRequest(from, to) {
     return new Promise(async (resolve, reject) => {
         try {
-            let req = await DBManager.find(DBModels.USERS_FRIEND_REQUESTS, {
-                "FROM": from,
-                "TO": to
+            let req = await DBModels.usersFriendRequests.findOne({
+                "where": {
+                    "FROM": from,
+                    "TO": to
+                }
             });
 
             if (req == null) {
@@ -42,33 +47,17 @@ function checkFriendRequest(from, to) {
     });
 };
 
-function checkFriendRequest(from, to) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let req = await DBManager.find(DBModels.USERS_FRIEND_REQUESTS, {
-                "FROM": from,
-                "TO": to
-            });
-
-            if (req == null) {
-                resolve(false);
-            } else {
-                resolve(true);
-            };
-        } catch (e) {
-            reject(e);
-        };
-    });
-};
 
 function checkFriendship(user, user2) {
     return new Promise(async (resolve, reject) => {
         try {
-            let order = [user, user2].sort((a, b) => { return a - b });
-
-            let req = await DBManager.find(DBModels.USERS_FRIENDS, {
-                "User": order[0],
-                "User2": order[1]
+            let req = await DBModels.usersFriends.findOne({
+                "where": {
+                    [Op.or]: [
+                        { [Op.and]: [{ User: req.me.ID }, { User2: req.user.ID }] },
+                        { [Op.and]: [{ User: req.user.ID }, { User2: req.me.ID }] }
+                    ]
+                }
             });
 
             if (req == null) {

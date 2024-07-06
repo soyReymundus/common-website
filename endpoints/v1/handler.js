@@ -54,8 +54,10 @@ router.use((req, res, next) => {
                     }
                 };
 
-                let user = await DBManager.find(DBModels.USERS, {
-                    "ID": decoded.ID
+                let user = await DBModels.users.findOne({
+                    "where": {
+                        "ID": decoded.ID
+                    }
                 });
 
                 if (user == null) return responseManager(req, res, responsesEnum.INVALID_TOKEN);
