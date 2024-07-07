@@ -1,6 +1,9 @@
 {
     "port": 80,
     "host": "0.0.0.0",
+    "actualToS": 1,
+    "minimunAge": 18,
+    "legalMinimunAge": 13,
     "defaultLanguage": "en",
     "x-powered-by": false,
     "root": {

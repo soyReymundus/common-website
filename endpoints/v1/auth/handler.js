@@ -24,8 +24,16 @@ router.use((req, res, next) => {
 });
 
 //BLANK PAGE
-router.get("/", (req, res) => {
-    responseManager(req, res, responsesEnum.OK);
+router.get("/", async (req, res) => {
+    let contract = await DBModels.contracts.findOne({
+        "where": {
+            "ID": process.serverConfig["actualToS"]
+        }
+    });
+
+    responseManager(req, res, responsesEnum.OK, {
+        "ToSHashName": contract["HashName"]
+    });
 });
 
 module.exports = router;

@@ -26,7 +26,9 @@ router.delete("/", async (req, res) => {
     let schedule = new Date(date.setMonth(date.getMonth() + 1));
 
     req.me.DeletionDate = schedule.getTime();
-    req.me.save();
+    req.me.PasswordResets = req.me.PasswordResets + 1;
+    req.me.EmailResets = req.me.EmailResets + 1;
+    await req.me.save();
 
     return responseManager(req, res, responsesEnum.SUCCESSFULLY_SCHEDULED_DELETION, {
         "deletionDate": schedule.getTime()

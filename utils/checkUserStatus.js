@@ -18,7 +18,7 @@ module.exports = (req, res, user) => {
                     resolve(false);
                     break;
                 case statusEnum.users.BANNED:
-                    DBModels.usersPunishments.findOne({
+                    let userPunishment = await DBModels.usersPunishments.findOne({
                         "where": {
                             "UserID": user.ID,
                             "Ended": false

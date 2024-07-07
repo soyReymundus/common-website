@@ -31,8 +31,28 @@ router.patch("/", async (req, res) => {
     let hashedPassword = createHash('sha256').update(body.password + process.env["PASSWORD_SALT"]).digest('hex');
 
     if (req.user.Password != hashedPassword) return responseManager(req, res, responsesEnum.INCORRECT_PASSWORD);
-    
+
+    let contract;
+
+    if (req.me.ContractID != process.serverConfig["actualToS"]) contract = await DBModels.contracts.findOne({
+        "where": {
+            "ID": req.me.ContractID
+        }
+    });
+
+    if (body.acceptToS) {
+        if (typeof body.acceptToS != "boolean") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
+
+        if ((req.me.ContractID != process.serverConfig["actualToS"]) && !contract.IsSpecial) {
+            req.user["ContractID"] = process.serverConfig["actualToS"];
+            isThereChanges = true;
+        };
+    } else {
+        if ((req.me.ContractID != process.serverConfig["actualToS"]) && !contract.IsSpecial) return responseManager(req, res, responsesEnum.TOS_NOT_ACCEPTED);
+    };
+
     if (body.language) {
+        if (typeof body.language != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (!/^[a-zA-Z0-9\-]+$/.test(body.language)) return responseManager(req, res, responsesEnum.INVALID_LANGUAGE);
 
         let languagesArray = parser.parse(body.language);
@@ -102,7 +122,7 @@ router.patch("/", async (req, res) => {
 
         req.user["BirthDate"] = body.birthdate;
         isThereChanges = true;
-    }; 
+    };
 
     if (body.username) {
         if (3 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
@@ -134,9 +154,7 @@ router.patch("/", async (req, res) => {
 
         if (hashedPassword == hashedNewPassword) return responseManager(req, res, responsesEnum.SAME_PASSWORD);
 
-        req.user.PasswordResets = req.user.PasswordResets + 1;
-
-        req.user["PasswordResets"] = req.user.PasswordResets;
+        req.user["PasswordResets"] = req.user["PasswordResets"] + 1;
         req.user["Password"] = hashedNewPassword;
         isThereChanges = true;
     };
@@ -152,10 +170,8 @@ router.patch("/", async (req, res) => {
 
         if (emailChecker != null) return responseManager(req, res, responsesEnum.EMAIL_USED);
 
-        req.user.EmailResets = req.user.EmailResets + 1;
-
         req.user["Status"] = statusEnum.users.NEED_ACTIONS;
-        req.user["EmailResets"] = req.user.EmailResets;
+        req.user["EmailResets"] = req.user["EmailResets"] + 1;
         req.user["Email"] = body.email;
         isThereChanges = true;
 

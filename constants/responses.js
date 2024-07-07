@@ -101,6 +101,22 @@ module.exports = {
             "ja": "リクエストの本文は有効なJSONではありません。"
         }
     },
+    106: {
+        "status": 400,
+        "message": {
+            "en": "You must accept the terms of service to use this API.",
+            "es": "Debe aceptar los términos de servicio para utilizar esta API.",
+            "ja": "このAPIを使用するには、サービスの利用規約に同意する必要があります。"
+        }
+    },
+    107: {
+        "status": 403,
+        "message": {
+            "en": "We need to verify that you are human, please complete the captcha.",
+            "es": "Necesitamos verificar que eres humano, por favor completa el captcha.",
+            "ja": "あなたが人間であることを確認する必要があります。キャプチャを完了してください。"
+        }
+    },
     1000: {
         "status": 401,
         "message": {
@@ -145,7 +161,7 @@ module.exports = {
         "status": 403,
         "message": {
             "en": "Your account is banned.",
-            "es": "Tu cuenta esta bloqueada.",
+            "es": "Tu cuenta esta suspendida.",
             "ja": "あなたのアカウントは停止されています。"
         }
     },
@@ -153,7 +169,7 @@ module.exports = {
         "status": 451,
         "message": {
             "en": "Your account is banned for legal reasons.",
-            "es": "Tu cuenta esta bloqueada por razones legales.",
+            "es": "Tu cuenta esta suspendida por razones legales.",
             "ja": "法的な理由により、あなたのアカウントは停止されています。"
         }
     },
@@ -168,9 +184,9 @@ module.exports = {
     1008: {
         "status": 403,
         "message": {
-            "en": "You must be 13 years or older to register.",
-            "es": "Debes tener 13 años o más para registrarte.",
-            "ja": "登録するには13歳以上である必要があります。"
+            "en": "You are not old enough to register.",
+            "es": "No tienes edad suficiente para registrarte.",
+            "ja": "登録するのに十分な年齢ではありません。"
         }
     },
     1009: {
@@ -315,6 +331,14 @@ module.exports = {
             "en": "The password has been reset successfully.",
             "es": "La contraseña se ha restablecido correctamente.",
             "ja": "パスワードが正常にリセットされました。"
+        }
+    },
+    1027: {
+        "status": 451,
+        "message": {
+            "es": "No tienes edad mínima legal para registrarte.",
+            "en": "You do not meet the legal minimum age to register.",
+            "ja": "登録するための法定最低年齢を満たしていません。"
         }
     },
     2000: {
@@ -619,6 +643,22 @@ module.exports = {
             "en": "You can not change your username because you need to wait a month.",
             "es": "No puedes cambiar tu nombre de usuario porque necesitas esperar un mes.",
             "ja": "ユーザー名を変更できません。1か月待つ必要があります。"
+        }
+    },
+    2038: {
+        "status": 410,
+        "message": {
+            "en": "The user was deleted.",
+            "es": "El usuario fue eliminado.",
+            "ja": "ユーザーは削除されました。"
+        }
+    },
+    2039: {
+        "status": 403,
+        "message": {
+            "en": "The user was banned.",
+            "es": "El usuario fue suspendido.",
+            "ja": "ユーザーは禁止されました。"
         }
     }
 };

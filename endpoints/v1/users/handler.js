@@ -53,8 +53,9 @@ router.param('user', async (req, res, next, user) => {
     });
 
     if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
-    if (u["Status"] == statusEnum.users["BANNED"] || u["Status"] == statusEnum.users["DELETED"]) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
-    //
+    if (u["Status"] == statusEnum.users["BANNED"]) return responseManager(req, res, responsesEnum.USER_BANNED);
+    if (u["Status"] == statusEnum.users["DELETED"]) return responseManager(req, res, responsesEnum.USER_DELETED);
+
     req.user = u;
 
     next();

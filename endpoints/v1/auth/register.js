@@ -26,7 +26,8 @@ router.post("/", async (req, res) => {
     if (typeof body.birthdate != "number" || typeof body.email != "string" || typeof body.username != "string" || typeof body.password != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
     if (body.birthdate >= Date.now()) return responseManager(req, res, responsesEnum.INVALID_BIRTHDATE);
-    if ((new Date(new Date() - new Date(body.birthdate)).getFullYear() - 1970) < parseInt(process.env["MINIMUM_AGE"])) return responseManager(req, res, responsesEnum.NOT_OLD_ENOUGH);
+    if ((new Date(new Date() - new Date(body.birthdate)).getFullYear() - 1970) < parseInt(process.serverConfig["legalMinimunAge"])) return responseManager(req, res, responsesEnum.NOT_LEGAL_MINIMUM_AGE, { "legalMinimumAge": parseInt(process.serverConfig["legalMinimunAge"]) });
+    if ((new Date(new Date() - new Date(body.birthdate)).getFullYear() - 1970) < parseInt(process.serverConfig["minimunAge"])) return responseManager(req, res, responsesEnum.NOT_OLD_ENOUGH, { "minimumAge": parseInt(process.serverConfig["minimunAge"]) });
     if (3 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
     if (6 > body.password.length || 64 < body.password.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
     if (body.email.length > 320 || !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(body.email)) return responseManager(req, res, responsesEnum.INVALID_EMAIL);
@@ -52,16 +53,17 @@ router.post("/", async (req, res) => {
     let UsernameCoolDown = new Date(date.setMonth(date.getMonth() + 1));
 
     await DBModels.users.create({
+        "Email": body.email,
         "Username": body.username,
         "Password": hashedPassword,
         "BirthDate": body.birthdate,
         "UsernameCoolDown": UsernameCoolDown.getTime(),
-        "Email": body.email
+        "ContractID": process.serverConfig["actualToS"]
     });
 
     responseManager(req, res, responsesEnum.EMAIL_VERIFICATION_REQUIRED);
 
-    let user = await await DBModels.users.findOne({
+    let user = await DBModels.users.findOne({
         "where": {
             "Username": body.username
         }

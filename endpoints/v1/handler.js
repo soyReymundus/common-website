@@ -82,6 +82,28 @@ router.use((req, res, next) => {
     };
 });
 
+router.use(async (req, res, next) => {
+    if (req.me) {
+        if (req.me.ContractID != process.serverConfig["actualToS"]) {
+
+            let contract = await DBModels.contracts.findOne({
+                "where": {
+                    "ID": req.me.ContractID
+                }
+            });
+
+            if (contract.IsSpecial) return next();
+            if (req.path.startsWith("/files") && (req.method == "GET" || req.method == "HEAD")) return next();
+            if (req.path == "/auth" && (req.method == "GET" || req.method == "HEAD")) return next();
+            if ((req.path == "/users/@me" || req.path == "/users/" + req.me.ID || req.path == "/users/@" + req.me.Username) && (req.method == "PATCH" || req.method == "DELETE")) return next();
+            
+            return responseManager(req, res, responsesEnum.TOS_NOT_ACCEPTED);
+        };
+    };
+
+    next();
+});
+
 router.use(json());
 router.use("/auth", require("./auth/handler.js"));
 router.use("/users", require("./users/handler.js"));
@@ -99,8 +121,8 @@ router.get("/", (req, res) => {
 
 //Error handler
 router.use((err, req, res, next) => {
-    if (err.type == "entity.parse.failed") return responseManager(req, res, responsesEnum.OK);
-    if (err.type == "entity.too.large") return responseManager(req, res, responsesEnum.OK);
+    if (err.type == "entity.parse.failed") return responseManager(req, res, responsesEnum.INVALID_JSON_BODY);
+    if (err.type == "entity.too.large") return responseManager(req, res, responsesEnum.TOO_LARGE_JSON_BODY);
 
     next(err);
 });

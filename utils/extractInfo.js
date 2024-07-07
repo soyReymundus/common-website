@@ -21,7 +21,7 @@ module.exports.user = (user, privilegedData) => {
             if (privilegedData) {
                 info["email"] = user["Email"];
 
-                info["outcomingFriendRequests"] = (await DBModels.usersFriendRequests.findAll({
+                info["outgoingFriendRequests"] = (await DBModels.usersFriendRequests.findAll({
                     "where": {
                         "FROM": info.ID
                     }

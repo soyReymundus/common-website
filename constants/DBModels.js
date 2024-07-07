@@ -2,6 +2,25 @@ const sequelize = require("../utils/DBManager.js");
 const { DataTypes } = require("sequelize");
 
 module.exports = Object.freeze({
+    contracts: sequelize.define('Contracts', {
+        ID: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        HashName: {
+            type: DataTypes.STRING(64),
+            allowNull: true,
+            unique: true,
+        },
+        IsSpecial: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
+    }, {
+        tableName: 'Contracts',
+        timestamps: false
+    }),
     users: sequelize.define('Users', {
         ID: {
             type: DataTypes.INTEGER,
@@ -70,6 +89,14 @@ module.exports = Object.freeze({
                 key: 'ID',
             },
         },
+        ContractID: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Contracts',
+                key: 'ID',
+            },
+        },
         LastName: {
             type: DataTypes.STRING(255),
             allowNull: true,
@@ -118,7 +145,7 @@ module.exports = Object.freeze({
             allowNull: false
         },
         Reason: {
-            type: DataTypes.STRING(32),
+            type: DataTypes.STRING(350),
             allowNull: true
         },
         Duration: {
@@ -298,7 +325,7 @@ module.exports = Object.freeze({
             }
         },
         Reason: {
-            type: DataTypes.STRING(32),
+            type: DataTypes.STRING(350),
             allowNull: true
         }
     }, {
@@ -406,7 +433,7 @@ module.exports = Object.freeze({
             }
         },
         Reason: {
-            type: DataTypes.STRING(32),
+            type: DataTypes.STRING(350),
             allowNull: true
         }
     }, {

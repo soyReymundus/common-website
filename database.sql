@@ -51,6 +51,16 @@ INSERT INTO UserPermissions (Name) VALUES ('None'); #1
 INSERT INTO UserPermissions (Name) VALUES ('Moderator'); #2
 INSERT INTO UserPermissions (Name) VALUES ('Administrator'); #3
 
+CREATE TABLE Contracts (
+    ID int NOT NULL AUTO_INCREMENT,
+    HashName varchar(64) NOT NULL,
+    IsSpecial BOOL NOT NULL,
+    PRIMARY KEY (ID),
+    UNIQUE (HashName)
+);
+
+INSERT INTO Contracts (HashName, IsSpecial) VALUES ('39b8a3d8f7660175b2ef9f31cc5453c5f2d1741047d3911bcf77f73d9ab234b2', 0); #1
+
 CREATE TABLE Users (
     ID int NOT NULL AUTO_INCREMENT,
     Username varchar(32),
@@ -65,6 +75,7 @@ CREATE TABLE Users (
     Description varchar(5000),
     Status int NOT NULL DEFAULT 2,
     Permissions int NOT NULL DEFAULT 1,
+    ContractID int NOT NULL,
     LastName varchar(255),
     FirstName varchar(255),
     BirthDate BIGINT,
@@ -72,8 +83,9 @@ CREATE TABLE Users (
     DeletionDate BIGINT,
     PRIMARY KEY (ID),
     FOREIGN KEY (Status) REFERENCES UserStatus(ID),
+    FOREIGN KEY (ContractID) REFERENCES Contracts(ID),
     FOREIGN KEY (Permissions) REFERENCES UserPermissions(ID),
-    UNIQUE (Email)
+    UNIQUE (Email),
     UNIQUE (Username)
 );
 
@@ -155,7 +167,7 @@ CREATE TABLE UsersPunishments (
     LegalPunishment BOOL NOT NULL,
     UserID int NOT NULL,
     Ended BOOL NOT NULL,
-    Reason varchar(32),
+    Reason varchar(350),
     Duration BIGINT,
     FOREIGN KEY (UserID) REFERENCES Users(ID),
     PRIMARY KEY (ID)
@@ -174,7 +186,7 @@ CREATE TABLE PostsPunishments (
     LegalPunishment BOOL NOT NULL,
     Removed BOOL NOT NULL,
     PostID int NOT NULL,
-    Reason varchar(32),
+    Reason varchar(350),
     FOREIGN KEY (PostID) REFERENCES Posts(ID),
     PRIMARY KEY (ID)
 );
@@ -184,7 +196,7 @@ CREATE TABLE ChatsPunishments (
     LegalPunishment BOOL NOT NULL,
     Removed BOOL NOT NULL,
     ChatID int NOT NULL,
-    Reason varchar(32),
+    Reason varchar(350),
     FOREIGN KEY (ChatID) REFERENCES Chats(ID),
     PRIMARY KEY (ID)
 );
