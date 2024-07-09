@@ -18,13 +18,6 @@ router.param('user', async (req, res, next, user) => {
     if (user.startsWith("@")) {
         user = user.slice(1);
 
-        if (user == "me") {
-            if (!req.me) return responseManager(req, res, responsesEnum.NEED_TO_LOG_IN_TO_SEE_YOURSELF);
-            req.user = req.me;
-
-            return next();
-        };
-
         if (req.me && req.me.Username == user) {
             req.user = req.me;
 
@@ -35,6 +28,13 @@ router.param('user', async (req, res, next, user) => {
             "Username": user
         };
     } else {
+        if (user == "me") {
+            if (!req.me) return responseManager(req, res, responsesEnum.NEED_TO_LOG_IN_TO_SEE_YOURSELF);
+            req.user = req.me;
+
+            return next();
+        };
+        
         if (isNaN(parseInt(user))) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
 
         if (req.me && req.me.ID == user) {
@@ -65,12 +65,7 @@ router.use("/:user/relationship", require("./userRelationship.js"));
 router.use("/:user", require("./getUser.js"));
 router.use("/:user", require("./deleteUser.js"));
 router.use("/:user", require("./updateUser.js"));
-
-router.use((req, res, next) => {
-    if (req.method != "GET" && req.method != "HEAD") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
-
-    next();
-});
+router.use("/", require("./getUsers.js"));
 
 //BLANK PAGE
 router.get("/", (req, res) => {

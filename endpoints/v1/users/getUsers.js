@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 const { Router } = require("express");
 const router = Router();
+const { Op } = require('sequelize');
 const { createHash } = require("crypto");
 const DBManager = require("../../../utils/DBManager.js");
+const searchUtilities = require("../../../utils/searchUtilities.js");
 const extractInfo = require("../../../utils/extractInfo.js");
 const emailManager = require("../../../utils/emailManager.js");
 const DBModels = require("../../../constants/DBModels.js");
@@ -19,29 +21,61 @@ router.use((req, res, next) => {
 });
 
 router.get("/", async (req, res) => {
-    //req.query
-    //DisplayName
-    //LastName
-    //FirstName
-    //Username
-    //Description
+    let where = {};
+    let or = [];
 
-    /*DBManager.find(DBModels.USERS, {
-        "ID": [{
-            "$unequal": 1
-        }, {
-            "$unequal": 2
-        }]
-    }, {
-        "elements": ["*"],
-        "limit": -1,
-        "useOR": false
-    })*/
+    if (req.query["username"]) {
+        let queryParam = searchUtilities.parseQuery(req.query["username"]);
 
-    let privilege = (req.me && req.me.ID == req.user.ID);
-    
-    responseManager(req, res, responsesEnum.USER_SUCCESSFULLY_RETRIEVE, {
-        user: await extractInfo.user(req.user, privilege)
+        if (queryParam != null) or.push(
+            searchUtilities.likesGenerator(queryParam, "Username")
+        );
+    };
+
+    if (req.query["description"]) {
+        let queryParam = searchUtilities.parseQuery(req.query["description"]);
+
+        if (queryParam != null) or.push(
+            searchUtilities.likesGenerator(queryParam, "Description")
+        );
+    };
+
+    if (req.query["displayName"]) {
+        let queryParam = searchUtilities.parseQuery(req.query["displayName"]);
+
+        if (queryParam != null) or.push(
+            searchUtilities.likesGenerator(queryParam, "displayName")
+        );
+    };
+
+    if (or.length != 0) where = {
+        [Op.or]: or
+    };
+
+    if (req.query["ignore"]) {
+        let IDs = searchUtilities.parseQuery(req.query["ignore"], searchUtilities.dataTypes.NUMBER);
+
+        if (IDs != null) where["ID"] = {
+            [Op.notIn]: IDs
+        };
+    };
+
+    let rawUsers = await DBModels.users.findAll({
+        "where": where,
+        "limit": 8
+    });
+
+    let users = [];
+
+    for (let index = 0; index < rawUsers.length; index++) {
+        const rawUser = rawUsers[index];
+        let privilege = (req.me && req.me.ID == rawUser.ID);
+
+        users.push(await extractInfo.user(rawUser, privilege));
+    };
+
+    responseManager(req, res, responsesEnum.USERS_SUCCESSFULLY_RETRIEVE, {
+        users: users
     });
 });
 

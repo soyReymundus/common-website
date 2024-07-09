@@ -53,6 +53,22 @@ module.exports = {
             "ja": "サーバーが処理できない競合があります。"
         }
     },
+    7: {
+        "status": 422,
+        "message": {
+            "en": "One or more QUERY parameters are missing. Please consult the documentation.",
+            "es": "Faltan uno o más parámetros QUERY. Por favor consulte la documentación.",
+            "ja": "1つ以上のQUERYパラメータが欠落しています。ドキュメントを参照してください。"
+        }
+    },
+    8: {
+        "status": 422,
+        "message": {
+            "en": "One or more QUERY parameters contains the wrong data type. Please consult the documentation.",
+            "es": "Uno o más parámetros QUERY contienen el tipo de datos incorrecto. Por favor consulte la documentación.",
+            "ja": "1つ以上のQUERYパラメータに誤ったデータ型が含まれています。ドキュメントを参照してください。"
+        }
+    },
     100: {
         "status": 400,
         "message": {
@@ -115,6 +131,14 @@ module.exports = {
             "en": "We need to verify that you are human, please complete the captcha.",
             "es": "Necesitamos verificar que eres humano, por favor completa el captcha.",
             "ja": "あなたが人間であることを確認する必要があります。キャプチャを完了してください。"
+        }
+    },
+    108: {
+        "status": 403,
+        "message": {
+            "en": "You do not have permission to perform that operation.",
+            "es": "No tiene permiso para realizar esa operación.",
+            "ja": "その操作を行う権限がありません。"
         }
     },
     1000: {
@@ -660,5 +684,13 @@ module.exports = {
             "es": "El usuario fue suspendido.",
             "ja": "ユーザーは禁止されました。"
         }
-    }
+    },
+    2040: {
+        "status": 200,
+        "message": {
+            "en": "Users successfully retrieved.",
+            "es": "Usuarios obtenidos exitosamente.",
+            "ja": "ユーザー情報が正常に取得されました。"
+        }
+    },
 };
