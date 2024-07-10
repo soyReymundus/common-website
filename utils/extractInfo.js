@@ -15,7 +15,8 @@ module.exports.user = (user, privilegedData) => {
                 "permissions": user["Permissions"],
                 "birthDate": user["BirthDate"],
                 "firstName": user["FirstName"],
-                "lastName": user["LastName"]
+                "lastName": user["LastName"],
+                "creationDate": user["CreationDate"]
             };
 
             if (privilegedData) {

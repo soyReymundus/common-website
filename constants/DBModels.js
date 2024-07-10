@@ -118,6 +118,10 @@ module.exports = Object.freeze({
             type: DataTypes.BIGINT,
             allowNull: true,
         },
+        CreationDate: {
+            type: DataTypes.BIGINT,
+            allowNull: false,
+        },
     }, {
         tableName: 'Users',
         timestamps: false,
@@ -361,6 +365,11 @@ module.exports = Object.freeze({
             type: DataTypes.STRING(325)
         },
         PublicationDate: {
+            allowNull: false,
+            type: DataTypes.BIGINT
+        },
+        LastUpdate: {
+            allowNull: true,
             type: DataTypes.BIGINT
         }
     }, {
@@ -394,8 +403,12 @@ module.exports = Object.freeze({
             allowNull: true
         },
         PublicationDate: {
-            type: DataTypes.BIGINT,
-            allowNull: true
+            allowNull: false,
+            type: DataTypes.BIGINT
+        },
+        LastUpdate: {
+            allowNull: true,
+            type: DataTypes.BIGINT
         },
         Status: {
             type: DataTypes.INTEGER,

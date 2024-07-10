@@ -57,6 +57,7 @@ router.post("/", async (req, res) => {
         "Username": body.username,
         "Password": hashedPassword,
         "BirthDate": body.birthdate,
+        "CreationDate": Date.now(),
         "UsernameCoolDown": UsernameCoolDown.getTime(),
         "ContractID": process.serverConfig["actualToS"]
     });
