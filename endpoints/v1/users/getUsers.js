@@ -60,6 +60,10 @@ router.get("/", async (req, res) => {
         };
     };
 
+    where["Status"] = {
+        [Op.notIn]: [statusEnum.users.BANNED, statusEnum.users.DELETED]
+    };
+
     let rawUsers = await DBModels.users.findAll({
         "where": where,
         "limit": 8
