@@ -693,4 +693,44 @@ module.exports = {
             "ja": "ユーザー情報が正常に取得されました。"
         }
     },
+    3000: {
+        "status": 200,
+        "message": {
+            "en": "Post successfully retrieved.",
+            "es": "Publicación obtenida exitosamente.",
+            "ja": "投稿が正常に取得されました。"
+        }
+    },
+    3001: {
+        "status": 200,
+        "message": {
+            "en": "Posts successfully retrieved.",
+            "es": "Publicaciones obtenidas exitosamente.",
+            "ja": "投稿が正常に取得されました。"
+        }
+    },
+    3002: {
+        "status": 404,
+        "message": {
+            "en": "Post not found.",
+            "es": "Publicación no encontrada.",
+            "ja": "投稿が見つかりません。"
+        }
+    },
+    3003: {
+        "status": 410,
+        "message": {
+            "en": "The post was deleted.",
+            "es": "La publicación fue eliminada.",
+            "ja": "投稿は削除されました。"
+        }
+    },
+    3004: {
+        "status": 403,
+        "message": {
+            "en": "The post is hidden.",
+            "es": "La publicación está oculta.",
+            "ja": "投稿は非表示です。"
+        }
+    }
 };

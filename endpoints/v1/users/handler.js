@@ -34,7 +34,7 @@ router.param('user', async (req, res, next, user) => {
 
             return next();
         };
-        
+
         if (isNaN(parseInt(user))) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
 
         if (req.me && req.me.ID == user) {
@@ -53,8 +53,22 @@ router.param('user', async (req, res, next, user) => {
     });
 
     if (u == null) return responseManager(req, res, responsesEnum.USER_NOT_FOUND);
-    if (u["Status"] == statusEnum.users["BANNED"]) return responseManager(req, res, responsesEnum.USER_BANNED);
-    if (u["Status"] == statusEnum.users["DELETED"]) return responseManager(req, res, responsesEnum.USER_DELETED);
+
+    if (u["Status"] == statusEnum.users["BANNED"]) {
+        if (
+            (req.path != "/" + u.ID && req.path != "/@" + u.Username)
+            ||
+            (req.method != "GET" && req.method != "HEAD")
+        ) return responseManager(req, res, responsesEnum.USER_BANNED);
+    };
+
+    if (u["Status"] == statusEnum.users["DELETED"]) {
+        if (
+            (req.path != "/" + u.ID && req.path != "/@" + u.Username)
+            ||
+            (req.method != "GET" && req.method != "HEAD")
+        ) return responseManager(req, res, responsesEnum.USER_DELETED);
+    };
 
     req.user = u;
 

@@ -20,6 +20,13 @@ module.exports.user = (user, privilegedData) => {
             };
 
             if (privilegedData) {
+                let contract = await DBModels.contracts.findOne({
+                    "where": {
+                        "ID": user["ContractID"]
+                    }
+                });
+
+                info["contract"] = contract["HashName"];
                 info["email"] = user["Email"];
 
                 info["outgoingFriendRequests"] = (await DBModels.usersFriendRequests.findAll({
@@ -61,6 +68,24 @@ module.exports.user = (user, privilegedData) => {
                     };
                 });
             };
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};
+
+module.exports.limitedUser = (user) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let info = {
+                "ID": user["ID"],
+                "username": user["Username"],
+                "birthDate": user["BirthDate"],
+                "creationDate": user["CreationDate"]
+            };
+
             resolve(info);
         } catch (e) {
             reject(e);

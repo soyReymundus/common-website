@@ -21,9 +21,21 @@ router.use((req, res, next) => {
 
 router.get("/", async (req, res) => {
     let privilege = (req.me && req.me.ID == req.user.ID);
-    
-    responseManager(req, res, responsesEnum.USER_SUCCESSFULLY_RETRIEVE, {
-        user: await extractInfo.user(req.user, privilege)
+    let userData;
+    let responseNumber = responsesEnum.USER_SUCCESSFULLY_RETRIEVED;
+
+    if (!privilege && req.user["Status"] == statusEnum.users["DELETED"]) {
+        responseNumber = responsesEnum.USER_DELETED;
+        userData = await extractInfo.limitedUser(req.user);
+    } else if (!privilege && req.user["Status"] == statusEnum.users["BANNED"]) {
+        responseNumber = responsesEnum.USER_BANNED;
+        userData = await extractInfo.limitedUser(req.user);
+    } else {
+        userData = await extractInfo.user(req.user, privilege);
+    };
+
+    responseManager(req, res, responseNumber, {
+        user: userData
     });
 });
 

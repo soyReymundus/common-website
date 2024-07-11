@@ -78,7 +78,7 @@ router.get("/", async (req, res) => {
         users.push(await extractInfo.user(rawUser, privilege));
     };
 
-    responseManager(req, res, responsesEnum.USERS_SUCCESSFULLY_RETRIEVE, {
+    responseManager(req, res, responsesEnum.USERS_SUCCESSFULLY_RETRIEVED, {
         users: users
     });
 });
