@@ -68,7 +68,7 @@ module.exports = Object.freeze({
             unique: true,
         },
         Description: {
-            type: DataTypes.STRING(5000),
+            type: DataTypes.STRING(500),
             allowNull: true,
         },
         Status: {
@@ -98,11 +98,11 @@ module.exports = Object.freeze({
             },
         },
         LastName: {
-            type: DataTypes.STRING(255),
+            type: DataTypes.STRING(60),
             allowNull: true,
         },
         FirstName: {
-            type: DataTypes.STRING(255),
+            type: DataTypes.STRING(60),
             allowNull: true,
         },
         BirthDate: {
@@ -399,7 +399,7 @@ module.exports = Object.freeze({
             allowNull: true
         },
         Content: {
-            type: DataTypes.STRING(15000),
+            type: DataTypes.STRING(3000),
             allowNull: true
         },
         PublicationDate: {
@@ -464,6 +464,14 @@ module.exports = Object.freeze({
             allowNull: false,
             references: {
                 model: 'Posts',
+                key: 'ID'
+            }
+        },
+        UserID: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Users',
                 key: 'ID'
             }
         },

@@ -101,7 +101,7 @@ router.patch("/", async (req, res) => {
         let now = new Date();
         let birthdate = new Date(body.birthdate);
         let difference = new Date(now - birthdate);
-        let minimunAge = parseInt(process.env["MINIMUM_AGE"]);
+        let minimunAge = parseInt(process.serverConfig["minimunAge"]);
 
         if (body.birthdate >= now.getTime()) return responseManager(req, res, responsesEnum.INVALID_BIRTHDATE);
 
@@ -203,14 +203,14 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.lastName) {
-        if (255 < body.lastName.length) return responseManager(req, res, responsesEnum.INVALID_LASTNAME);
+        if (60 < body.lastName.length) return responseManager(req, res, responsesEnum.INVALID_LASTNAME);
 
         req.user["LastName"] = body.lastName;
         isThereChanges = true;
     };
 
     if (body.firstName) {
-        if (255 < body.firstName.length) return responseManager(req, res, responsesEnum.INVALID_FIRSTNAME);
+        if (60 < body.firstName.length) return responseManager(req, res, responsesEnum.INVALID_FIRSTNAME);
 
         req.user["FirstName"] = body.firstName;
         isThereChanges = true;

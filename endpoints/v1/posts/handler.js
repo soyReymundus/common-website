@@ -44,6 +44,8 @@ router.param('post', async (req, res, next, post) => {
     next();
 });
 
+router.use("/:post", require("./getPost.js"));
+
 //BLANK PAGE
 router.get("/", (req, res) => {
     responseManager(req, res, responsesEnum.OK);

@@ -472,17 +472,17 @@ module.exports = {
     2013: {
         "status": 422,
         "message": {
-            "en": "The last name must be less than 255 in length.",
-            "es": "La apellido debe tener una longitud inferior a 255.",
-            "ja": "姓は255文字未満でなければなりません。"
+            "en": "The last name must be less than 60 in length.",
+            "es": "La apellido debe tener una longitud inferior a 60.",
+            "ja": "姓は60文字未満でなければなりません。"
         }
     },
     2014: {
         "status": 422,
         "message": {
-            "en": "The first name must be less than 255 in length.",
-            "es": "La nombre debe tener una longitud inferior a 255.",
-            "ja": "名は255文字未満でなければなりません。"
+            "en": "The first name must be less than 60 in length.",
+            "es": "La nombre debe tener una longitud inferior a 60.",
+            "ja": "名は60文字未満でなければなりません。"
         }
     },
     2015: {

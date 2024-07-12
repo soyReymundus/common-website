@@ -59,8 +59,6 @@ CREATE TABLE Contracts (
     UNIQUE (HashName)
 );
 
-INSERT INTO Contracts (HashName, IsSpecial) VALUES ('39b8a3d8f7660175b2ef9f31cc5453c5f2d1741047d3911bcf77f73d9ab234b2', 0); #1
-
 CREATE TABLE Users (
     ID int NOT NULL AUTO_INCREMENT,
     Username varchar(32),
@@ -72,12 +70,12 @@ CREATE TABLE Users (
     Language varchar(8),
     Banner varchar(64),
     Email varchar(320),
-    Description varchar(5000),
+    Description varchar(500),
     Status int NOT NULL DEFAULT 2,
     Permissions int NOT NULL DEFAULT 1,
     ContractID int NOT NULL,
-    LastName varchar(255),
-    FirstName varchar(255),
+    LastName varchar(60),
+    FirstName varchar(60),
     BirthDate BIGINT,
     UsernameCoolDown BIGINT DEFAULT 0,
     DeletionDate BIGINT,
@@ -129,7 +127,7 @@ CREATE TABLE Posts (
     PostID int,
     UserID int NOT NULL,
     Title varchar(32),
-    Content varchar(15000),
+    Content varchar(3000),
     PublicationDate BIGINT NOT NULL,
     LastUpdate BIGINT,
     Status int NOT NULL DEFAULT 1,
@@ -179,7 +177,9 @@ CREATE TABLE UsersPunishments (
 CREATE TABLE PostsOpinions (
     ID int NOT NULL AUTO_INCREMENT,
     PostID int NOT NULL,
+    UserID int NOT NULL,
     IsLike BOOL NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
     FOREIGN KEY (PostID) REFERENCES Posts(ID),
     PRIMARY KEY (ID)
 );

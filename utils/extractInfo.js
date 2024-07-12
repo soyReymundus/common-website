@@ -1,3 +1,4 @@
+const sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const DBManager = require("./DBManager.js");
 const DBModels = require("../constants/DBModels.js");
@@ -84,6 +85,73 @@ module.exports.limitedUser = (user) => {
                 "username": user["Username"],
                 "birthDate": user["BirthDate"],
                 "creationDate": user["CreationDate"]
+            };
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};
+
+module.exports.post = (post, privilegedData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let info = {
+                "ID": post["ID"],
+                "userID": post["UserID"],
+                "title": post["Title"],
+                "content": post["Content"],
+                "publicationDate": post["PublicationDate"]
+            };
+
+            if (post["PostID"]) info["postID"] = post["PostID"];
+            if (post["LastUpdate"]) info["lastUpdate"] = post["LastUpdate"];
+
+            const opinions = (await DBModels.postsOpinions.findAll({
+                "attributes": [
+                    [sequelize.fn('SUM', sequelize.literal('CASE WHEN IsLike = true THEN 1 ELSE 0 END')), 'Likes'],
+                    [sequelize.fn('SUM', sequelize.literal('CASE WHEN IsLike = false THEN 1 ELSE 0 END')), 'Dislikes']
+                ],
+                "where": {
+                    "PostID": post["ID"]
+                }
+            }))[0].dataValues;
+
+            info["likes"] = opinions["Likes"];
+            info["dislikes"] = opinions["Dislikes"];
+
+            if (privilegedData) {
+                let opinionsUsers = await DBModels.postsOpinions.findAll({
+                    "where": {
+                        "PostID": post["ID"]
+                    }
+                });
+
+                info["likesUsers"] = opinionsUsers.map((opn) => {
+                    if (opn.IsLike) return opn.UserID;
+                });
+
+                info["dislikesUsers"] = opinionsUsers.map((opn) => {
+                    if (!opn.IsLike) return opn.UserID;
+                });
+            };
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};
+
+module.exports.limitedPost = (post) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let info = {
+                "ID": post["ID"],
+                "postID": post["PostID"],
+                "userID": post["UserID"],
+                "publicationDate": post["PublicationDate"]
             };
 
             resolve(info);

@@ -107,6 +107,7 @@ router.use(async (req, res, next) => {
 router.use(json());
 router.use("/auth", require("./auth/handler.js"));
 router.use("/users", require("./users/handler.js"));
+router.use("/posts", require("./posts/handler.js"));
 
 router.use((req, res, next) => {
     if (req.method != "GET" && req.method != "HEAD") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
