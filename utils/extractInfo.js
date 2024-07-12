@@ -118,8 +118,8 @@ module.exports.post = (post, privilegedData) => {
                 }
             }))[0].dataValues;
 
-            info["likes"] = opinions["Likes"];
-            info["dislikes"] = opinions["Dislikes"];
+            info["likes"] = parseInt(opinions["Likes"]);
+            info["dislikes"] = parseInt(opinions["Dislikes"]);
 
             if (privilegedData) {
                 let opinionsUsers = await DBModels.postsOpinions.findAll({
@@ -128,13 +128,20 @@ module.exports.post = (post, privilegedData) => {
                     }
                 });
 
-                info["likesUsers"] = opinionsUsers.map((opn) => {
-                    if (opn.IsLike) return opn.UserID;
-                });
+                info["likesUsers"] = opinionsUsers
+                    .filter((opn) => {
+                        if (opn.IsLike) return true;
+                    })
+                    .map((opn) => {
+                        return opn.UserID;
+                    });
 
-                info["dislikesUsers"] = opinionsUsers.map((opn) => {
-                    if (!opn.IsLike) return opn.UserID;
-                });
+                info["dislikesUsers"] = opinionsUsers
+                    .filter((opn) => {
+                        if (!opn.IsLike) return true;
+                    }).map((opn) => {
+                        return opn.UserID;
+                    });
             };
 
             resolve(info);

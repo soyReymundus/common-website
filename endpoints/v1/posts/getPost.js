@@ -20,7 +20,7 @@ router.use((req, res, next) => {
 });
 
 router.get("/", async (req, res) => {
-    let privilege = (req.me && req.me.ID == req.post.ID);
+    let privilege = (req.me && req.me.ID == req.post.UserID);
     let postData;
     let responseNumber = responsesEnum.POST_SUCCESSFULLY_RETRIEVED;
 
