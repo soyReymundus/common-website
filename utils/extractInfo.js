@@ -9,16 +9,17 @@ module.exports.user = (user, privilegedData) => {
             let info = {
                 "ID": user["ID"],
                 "username": user["Username"],
-                "displayName": user["DisplayName"],
-                "photo": user["Photo"],
-                "banner": user["Banner"],
-                "description": user["Description"],
                 "permissions": user["Permissions"],
                 "birthDate": user["BirthDate"],
-                "firstName": user["FirstName"],
-                "lastName": user["LastName"],
                 "creationDate": user["CreationDate"]
             };
+
+            if (user["FirstName"]) info["firstName"] = user["FirstName"];
+            if (user["LastName"]) info["lastName"] = user["LastName"];
+            if (user["Description"]) info["description"] = user["Description"];
+            if (user["Photo"]) info["photo"] = user["Photo"];
+            if (user["Banner"]) info["banner"] = user["Banner"];
+            if (user["DisplayName"]) info["displayName"] = user["DisplayName"];
 
             if (privilegedData) {
                 let contract = await DBModels.contracts.findOne({
@@ -27,10 +28,11 @@ module.exports.user = (user, privilegedData) => {
                     }
                 });
 
-                info["theme"] = contract["Theme"];
-                info["language"] = contract["Language"];
                 info["contract"] = contract["HashName"];
-                info["email"] = user["Email"];
+
+                if (user["Language"]) info["language"] = user["Language"];
+                if (user["Theme"]) info["theme"] = user["Theme"];
+                if (user["Email"]) info["email"] = user["Email"];
 
                 info["outgoingFriendRequests"] = (await DBModels.usersFriendRequests.findAll({
                     "where": {
@@ -120,8 +122,20 @@ module.exports.post = (post, privilegedData) => {
                 }
             }))[0].dataValues;
 
-            info["likes"] = parseInt(opinions["Likes"]);
-            info["dislikes"] = parseInt(opinions["Dislikes"]);
+            likes = parseInt(opinions["Likes"]);
+            dislikes = parseInt(opinions["Dislikes"]);
+
+            if (isNaN(likes)) {
+                info["likes"] = 0
+            } else {
+                info["likes"] = likes
+            };
+
+            if (isNaN(dislikes)) {
+                info["dislikes"] = 0
+            } else {
+                info["dislikes"] = dislikes
+            };
 
             if (privilegedData) {
                 let opinionsUsers = await DBModels.postsOpinions.findAll({
