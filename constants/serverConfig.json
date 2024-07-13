@@ -5,6 +5,24 @@
     "minimunAge": 18,
     "legalMinimunAge": 13,
     "defaultLanguage": "en",
+    "theme": [
+        "dark",
+        "light"
+    ],
+    "languages": [
+        {
+            "code": "es",
+            "regions": ["419", "ES"]
+        },
+        {
+            "code": "en",
+            "regions": ["US"]
+        },
+        {
+            "code": "ja",
+            "regions": ["JP"]
+        }
+    ],
     "x-powered-by": false,
     "root": {
         "disable": false,

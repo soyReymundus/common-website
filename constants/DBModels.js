@@ -58,6 +58,10 @@ module.exports = Object.freeze({
             type: DataTypes.STRING(8),
             allowNull: true,
         },
+        Theme: {
+            type: DataTypes.STRING(8),
+            allowNull: true,
+        },
         Banner: {
             type: DataTypes.STRING(64),
             allowNull: true,

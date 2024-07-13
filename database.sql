@@ -68,6 +68,7 @@ CREATE TABLE Users (
     PasswordResets INT NOT NULL DEFAULT 0,
     EmailResets INT NOT NULL DEFAULT 0,
     Language varchar(8),
+    Theme varchar(8),
     Banner varchar(64),
     Email varchar(320),
     Description varchar(500),

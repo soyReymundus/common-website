@@ -27,6 +27,8 @@ module.exports.user = (user, privilegedData) => {
                     }
                 });
 
+                info["theme"] = contract["Theme"];
+                info["language"] = contract["Language"];
                 info["contract"] = contract["HashName"];
                 info["email"] = user["Email"];
 

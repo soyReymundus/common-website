@@ -693,6 +693,22 @@ module.exports = {
             "ja": "ユーザー情報が正常に取得されました。"
         }
     },
+    2041: {
+        "status": 406,
+        "message": {
+            "en": "Theme is not available.",
+            "es": "El tema visual no está disponible.",
+            "ja": "テーマは利用できません。"
+        }
+    },
+    2042: {
+        "status": 403,
+        "message": {
+            "en": "You cannot change your birthdate because you can only be born once. If there is an error with your birthdate, please contact technical support.",
+            "es": "No puedes cambiar tu fecha de cumpleaños porque solo puedes nacer una vez. Si hay algún error con tu fecha de cumpleaños, contacta con el soporte técnico.",
+            "ja": "誕生日は一度しか生まれないため、変更できません。誕生日にエラーがある場合は、技術サポートに連絡してください。"
+        }
+    },
     3000: {
         "status": 200,
         "message": {

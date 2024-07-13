@@ -51,39 +51,35 @@ router.patch("/", async (req, res) => {
         if ((req.me.ContractID != process.serverConfig["actualToS"]) && !contract.IsSpecial) return responseManager(req, res, responsesEnum.TOS_NOT_ACCEPTED);
     };
 
+    if (body.theme) {
+        if (typeof body.theme != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
+        if (!process.serverConfig["theme"].includes(body.theme.toLowerCase())) return responseManager(req, res, responsesEnum.NOT_AVAILABLE_THEME);
+
+        req.user["Theme"] = body.theme.toLowerCase();
+        isThereChanges = true;
+    };
+
     if (body.language) {
         if (typeof body.language != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (!/^[a-zA-Z0-9\-]+$/.test(body.language)) return responseManager(req, res, responsesEnum.INVALID_LANGUAGE);
 
         let languagesArray = parser.parse(body.language);
+        let straightLanguage;
 
         if (languagesArray.length != 1) return responseManager(req, res, responsesEnum.INVALID_LANGUAGE);
 
-        switch (languagesArray[0].code) {
-            case "es":
-                straightLanguage = regionValidor(
-                    languagesArray[0].code,
-                    languagesArray[0].region,
-                    [undefined, "419", "ES"]
-                );
-                break;
-            case "en":
-                straightLanguage = regionValidor(
-                    languagesArray[0].code,
-                    languagesArray[0].region,
-                    [undefined, "US"]
-                );
-                break;
-            case "ja":
-                straightLanguage = regionValidor(
-                    languagesArray[0].code,
-                    languagesArray[0].region,
-                    [undefined, "JP"]
-                );
-                break;
-            default:
-                return responseManager(req, res, responsesEnum.NOT_AVAILABLE_LANGUAGE);
-                break;
+        let bodyLanguage = languagesArray[0];
+
+        for (let index = 0; index < process.serverConfig["languages"].length; index++) {
+            const language = process.serverConfig["languages"][index];
+
+            if (language.code != bodyLanguage.code) continue;
+
+            straightLanguage = regionValidor(
+                bodyLanguage.code,
+                bodyLanguage.region,
+                language.regions
+            );
         };
 
         if (!straightLanguage) return responseManager(req, res, responsesEnum.NOT_AVAILABLE_LANGUAGE);
@@ -96,26 +92,38 @@ router.patch("/", async (req, res) => {
     if (body.birthdate) {
         if (typeof body.birthdate != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
-        return responseManager(req, res, responsesEnum.UNAUTHORIZED);
+        return responseManager(req, res, responsesEnum.UNMODIFIABLE_BIRTHDAY);
 
         let now = new Date();
+        let duration = new Date()
         let birthdate = new Date(body.birthdate);
         let difference = new Date(now - birthdate);
         let minimunAge = parseInt(process.serverConfig["minimunAge"]);
+        let legalMinimunAge = parseInt(process.serverConfig["legalMinimunAge"]);
+        let ban = {
+            "Ended": false,
+            "Reason": "You are very young.",
+            "UserID": req.user.ID
+        };
 
         if (body.birthdate >= now.getTime()) return responseManager(req, res, responsesEnum.INVALID_BIRTHDATE);
 
         if ((difference.getFullYear() - 1970) < minimunAge) {
-            let needTime = new Date()
-            needTime.setFullYear(needTime.getFullYear() + minimunAge);
+            duration.setFullYear(duration.getFullYear() + minimunAge);
+            ban["LegalPunishment"] = false;
+            ban["Duration"] = duration.getTime();
 
-            await DBModels.usersPunishments.create({
-                "LegalPunishment": false,
-                "Ended": false,
-                "Duration": needTime.getTime(),
-                "Reason": "You are very young.",
-                "UserID": req.user.ID
-            });
+            await DBModels.usersPunishments.create(ban);
+
+            req.user["Status"] = statusEnum.users.BANNED;
+        };
+
+        if ((difference.getFullYear() - 1970) < legalMinimunAge) {
+            duration.setFullYear(duration.getFullYear() + legalMinimunAge);
+            ban["LegalPunishment"] = true;
+            ban["Duration"] = duration.getTime();
+
+            await DBModels.usersPunishments.create(ban);
 
             req.user["Status"] = statusEnum.users.BANNED;
         };
@@ -250,11 +258,9 @@ module.exports = router;
  * @returns 
  */
 function regionValidor(language, region, regions) {
-    if (regions.includes(region)) {
-        if (!region) return language;
+    if (!region) return language;
 
-        return `${language}-${region}`;
-    } else {
-        return;
-    };
+    if (!regions.includes(region)) return;
+
+    return `${language}-${region}`;
 };
