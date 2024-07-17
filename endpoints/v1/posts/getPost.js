@@ -29,6 +29,16 @@ router.get("/", async (req, res) => {
         postData = await extractInfo.limitedPost(req.post);
     } else if (!privilege && req.post["Status"] == statusEnum.posts["HIDDEN"]) {
         responseNumber = responsesEnum.POST_HIDDEN;
+
+        let reason = await DBModels.postsPunishments.findOne({
+            "where": {
+                PostID: req.post.ID,
+                Removed: false
+            }
+        });
+
+        if (reason.LegalPunishment) responseNumber = responsesEnum.POST_CENSORED;
+
         postData = await extractInfo.limitedPost(req.post);
     } else {
         postData = await extractInfo.post(req.post, privilege);

@@ -45,6 +45,7 @@ router.param('post', async (req, res, next, post) => {
 });
 
 router.use("/:post", require("./postHandler.js"));
+router.use("/", require("./postsHandler.js"));
 
 //BLANK PAGE
 router.get("/", (req, res) => {

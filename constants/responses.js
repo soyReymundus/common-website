@@ -709,6 +709,14 @@ module.exports = {
             "ja": "誕生日は一度しか生まれないため、変更できません。誕生日にエラーがある場合は、技術サポートに連絡してください。"
         }
     },
+    2043: {
+        "status": 200,
+        "message": {
+            "en": "User successfully deleted.",
+            "es": "Usuario eliminado con éxito.",
+            "ja": "ユーザーが正常に削除されました。"
+        }
+    },
     3000: {
         "status": 200,
         "message": {
@@ -748,5 +756,21 @@ module.exports = {
             "es": "La publicación está oculta.",
             "ja": "投稿は非表示です。"
         }
-    }
+    },
+    3005: {
+        "status": 451,
+        "message": {
+            "en": "The publication is censored.",
+            "es": "La publicación está censurada.",
+            "ja": "この投稿は法的な理由で検閲されています。"
+        }
+    },
+    3006: {
+        "status": 200,
+        "message": {
+            "en": "Post successfully deleted.",
+            "es": "Publicación eliminada con éxito.",
+            "ja": "投稿が正常に削除されました。"
+        }
+    },
 };
