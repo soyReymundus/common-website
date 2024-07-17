@@ -456,7 +456,7 @@ module.exports = {
     2011: {
         "status": 422,
         "message": {
-            "en": "The display username must be between 2 and 32 in length.",
+            "en": "The display name must be between 2 and 32 in length.",
             "es": "El nombre a mostrar debe tener entre 2 y 32 de longitud.",
             "ja": "表示されるユーザー名は2から32の長さである必要があります。"
         }
@@ -773,4 +773,36 @@ module.exports = {
             "ja": "投稿が正常に削除されました。"
         }
     },
+    3007: {
+        "status": 422,
+        "message": {
+            "en": "The title must be between 3 and 32 in length.",
+            "es": "El titulo debe tener entre 3 y 32 de longitud.",
+            "ja": "タイトルの長さは3から32の間でなければなりません。"
+        }
+    },
+    3008: {
+        "status": 422,
+        "message": {
+            "en": "The content must be between 5 and 3000 in length.",
+            "es": "El contendio debe tener entre 5 y 32 de longitud.",
+            "ja": "内容の長さは5から3000の間でなければなりません。"
+        }
+    },
+    3009: {
+        "status": 400,
+        "message": {
+            "en": "The post you are trying to reply to does not exist.",
+            "es": "La publicación a la que intentas responder no existe.",
+            "ja": "返信しようとしている投稿は存在しません。"
+        }
+    },
+    3010: {
+        "status": 201,
+        "message": {
+            "en": "Post successfully created.",
+            "es": "Publicación creada exitosamente.",
+            "ja": "投稿が正常に作成されました。"
+        }
+    }
 };

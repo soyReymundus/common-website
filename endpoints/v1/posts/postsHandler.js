@@ -18,6 +18,9 @@ router.use((req, res, next) => {
     next();
 });
 
-router.use();
+router.use(
+    require("./getPosts.js"),
+    require("./createPost.js")
+);
 
 module.exports = router;
