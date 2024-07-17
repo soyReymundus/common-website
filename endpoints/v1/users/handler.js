@@ -76,9 +76,7 @@ router.param('user', async (req, res, next, user) => {
 });
 
 router.use("/:user/relationship", require("./userRelationship.js"));
-router.use("/:user", require("./getUser.js"));
-router.use("/:user", require("./deleteUser.js"));
-router.use("/:user", require("./updateUser.js"));
+router.use("/:user", require("./userHandler.js"));
 router.use("/", require("./getUsers.js"));
 
 //BLANK PAGE

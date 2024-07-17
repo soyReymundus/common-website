@@ -13,12 +13,6 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use((req, res, next) => {
-    if (req.method != "GET" && req.method != "HEAD" && req.method != "DELETE" && req.method != "PATCH") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
-
-    next();
-});
-
 router.get("/", async (req, res) => {
     let privilege = (req.me && req.me.ID == req.user.ID);
     let userData;

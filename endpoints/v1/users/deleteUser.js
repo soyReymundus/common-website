@@ -12,12 +12,6 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use((req, res, next) => {
-    if (req.method != "DELETE" && req.method != "PATCH") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
-
-    next();
-});
-
 router.delete("/", async (req, res) => {
     if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
     if (req.me.ID != req.user.ID) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
