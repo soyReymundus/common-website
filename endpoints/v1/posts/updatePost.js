@@ -17,7 +17,6 @@ router.patch("/", async (req, res) => {
     if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
     if (req.me.ID != req.post.UserID) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
     let body = req.body;
-    let post = {};
     let isThereChanges = false;
 
     if (body.title) {

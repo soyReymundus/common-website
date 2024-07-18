@@ -2,6 +2,7 @@ const sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const DBManager = require("./DBManager.js");
 const DBModels = require("../constants/DBModels.js");
+const statusEnum = require("../constants/statusEnum.js");
 
 module.exports.user = (user, privilegedData) => {
     return new Promise(async (resolve, reject) => {

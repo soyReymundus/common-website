@@ -12,6 +12,7 @@ const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
+const relationshipsChecker = require("../../../utils/relationshipsChecker.js");
 
 router.post("/", async (req, res) => {
     if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
@@ -37,7 +38,7 @@ router.post("/", async (req, res) => {
     };
 
     if (body.postID) {
-        if (typeof body.title != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
+        if (typeof body.postID != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
         let p = await DBModels.posts.findOne({
             "where": {
