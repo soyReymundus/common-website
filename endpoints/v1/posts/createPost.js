@@ -13,7 +13,7 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.patch("/", async (req, res) => {
+router.post("/", async (req, res) => {
     if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
     let body = req.body;
     let post = {

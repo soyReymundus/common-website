@@ -20,7 +20,8 @@ router.use((req, res, next) => {
 
 router.use(
     require("./getPost.js"),
-    require("./deletePost.js")
+    require("./deletePost.js"),
+    require("./updatePost.js")
 );
 
 module.exports = router;

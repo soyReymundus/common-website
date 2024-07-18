@@ -48,3 +48,14 @@ module.exports["likesGenerator"] = (list, columnName) => {
 
     return returnable;
 };
+
+module.exports["orsGenerator"] = (list, columnName) => {
+    let returnable = {};
+    if (list.length == 1) {
+        returnable[columnName] = list[0];
+    } else {
+        returnable[columnName][Op.or] = list;
+    };
+
+    return returnable;
+};

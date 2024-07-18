@@ -34,6 +34,14 @@ router.get("/", async (req, res) => {
         );
     };
 
+    if (req.query["user"]) {
+        let queryParam = searchUtilities.parseQuery(req.query["user"], searchUtilities.dataTypes.NUMBER);
+
+        if (queryParam != null) or.push(
+            searchUtilities.orsGenerator(queryParam, "UserID")
+        );
+    };
+
     if (or.length != 0) where = {
         [Op.or]: or
     };
@@ -61,7 +69,7 @@ router.get("/", async (req, res) => {
         const rawUPost = rawPosts[index];
         let privilege = (req.me && req.me.ID == rawUPost.UserID);
 
-        posts.push(await extractInfo.user(rawUPost, privilege));
+        posts.push(await extractInfo.post(rawUPost, privilege));
     };
 
     responseManager(req, res, responsesEnum.POSTS_SUCCESSFULLY_RETRIEVED, {
