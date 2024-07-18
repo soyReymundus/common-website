@@ -127,6 +127,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.username) {
+        if (typeof body.username != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (3 > body.username.length || !/^[a-zA-Z0-9_\.]+$/.test(body.username) || 32 < body.username.length) return responseManager(req, res, responsesEnum.INVALID_USERNAME);
 
         if (Date.now() <= req.user["UsernameCoolDown"]) return responseManager(req, res, responsesEnum.USERNAME_COOLDOWN, {
@@ -150,6 +151,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.newPassword) {
+        if (typeof body.newPassword != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (6 > body.newPassword.length || 64 < body.newPassword.length) return responseManager(req, res, responsesEnum.INVALID_PASSWORD);
 
         let hashedNewPassword = createHash('sha256').update(body.newPassword + process.env["PASSWORD_SALT"]).digest('hex');
@@ -162,6 +164,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.email) {
+        if (typeof body.email != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (body.email.length > 320 || !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(body.email)) return responseManager(req, res, responsesEnum.INVALID_EMAIL);
 
         let emailChecker = await DBModels.users.findOne({
@@ -191,6 +194,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.displayName) {
+        if (typeof body.displayName != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (2 > body.displayName.length || 32 < body.displayName.length) return responseManager(req, res, responsesEnum.INVALID_DISPLAYNAME);
 
         req.user["DisplayName"] = body.displayName;
@@ -198,6 +202,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.description) {
+        if (typeof body.description != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (2000 < body.description.length) return responseManager(req, res, responsesEnum.INVALID_DESCRIPTION);
 
         req.user["Description"] = body.description;
@@ -205,6 +210,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.lastName) {
+        if (typeof body.lastName != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (60 < body.lastName.length) return responseManager(req, res, responsesEnum.INVALID_LASTNAME);
 
         req.user["LastName"] = body.lastName;
@@ -212,6 +218,7 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.firstName) {
+        if (typeof body.firstName != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (60 < body.firstName.length) return responseManager(req, res, responsesEnum.INVALID_FIRSTNAME);
 
         req.user["FirstName"] = body.firstName;

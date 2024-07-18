@@ -804,5 +804,13 @@ module.exports = {
             "es": "Publicación creada exitosamente.",
             "ja": "投稿が正常に作成されました。"
         }
+    },
+    3011: {
+        "status": 200,
+        "message": {
+            "en": "Post successfully updated.",
+            "es": "Publicación modificada exitosamente.",
+            "ja": "投稿が正常に更新されました。"
+        }
     }
 };

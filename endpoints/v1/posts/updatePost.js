@@ -15,47 +15,32 @@ const emailResponses = require("../../../constants/emailResponses.js");
 
 router.patch("/", async (req, res) => {
     if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
+    if (req.me.ID != req.post.UserID) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
     let body = req.body;
-    let post = {
-        "UserID": req.me.ID,
-        "PublicationDate": Date.now()
-    };
-
-    if (typeof body.title == "undefined" || typeof body.content == "undefined") return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
-    if (typeof body.title != "string" || typeof body.content != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
+    let post = {};
+    let isThereChanges = false;
 
     if (body.title) {
+        if (typeof body.title != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (3 > body.title.length || 32 < body.title.length) return responseManager(req, res, responsesEnum.INVALID_TITLE);
 
-        post["Title"] = body.title;
+        req.post["Title"] = body.title;
+        isThereChanges = true;
     };
 
     if (body.content) {
+        if (typeof body.content != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (5 > body.content.length || 3000 < body.content.length) return responseManager(req, res, responsesEnum.INVALID_CONTENT);
 
-        post["Content"] = body.content;
+        req.post["Content"] = body.content;
+        isThereChanges = true;
     };
 
-    if (body.postID) {
-        if (typeof body.title != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
+    if (!isThereChanges) return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
 
-        let p = await DBModels.posts.findOne({
-            "where": {
-                "ID": body.postID
-            }
-        });
+    await req.post.save();
 
-        if (p == null) return responseManager(req, res, responsesEnum.INVALID_POSTID);
-
-        if (await relationshipsChecker.checkBlock(p.UserID, req.me.ID)) return responseManager(req, res, responsesEnum.YOU_ARE_BLOCKED);
-        if (await relationshipsChecker.checkBlock(req.me.ID, p.UserID)) return responseManager(req, res, responsesEnum.YOU_HAVE_BLOCKED);
-
-        post["PostID"] = body.postID;
-    };
-
-    await DBModels.posts.create(post);
-
-    responseManager(req, res, responsesEnum.POSTS_SUCCESSFULLY_CREATE);
+    responseManager(req, res, responsesEnum.POSTS_SUCCESSFULLY_UPDATED);
 });
 
 module.exports = router;

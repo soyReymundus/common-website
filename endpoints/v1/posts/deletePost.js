@@ -17,7 +17,7 @@ router.delete("/", async (req, res) => {
     if (req.me.ID != req.post.UserID) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
 
     req.post.Status = statusEnum.posts.DELETED;
-    await req.me.save();
+    await req.post.save();
 
     return responseManager(req, res, responsesEnum.POST_SUCCESSFULLY_DELETED);
 });
