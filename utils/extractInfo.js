@@ -138,29 +138,6 @@ module.exports.post = (post, privilegedData) => {
                 info["dislikes"] = dislikes
             };
 
-            if (privilegedData) {
-                let opinionsUsers = await DBModels.postsOpinions.findAll({
-                    "where": {
-                        "PostID": post["ID"]
-                    }
-                });
-
-                info["likesUsers"] = opinionsUsers
-                    .filter((opn) => {
-                        if (opn.IsLike) return true;
-                    })
-                    .map((opn) => {
-                        return opn.UserID;
-                    });
-
-                info["dislikesUsers"] = opinionsUsers
-                    .filter((opn) => {
-                        if (!opn.IsLike) return true;
-                    }).map((opn) => {
-                        return opn.UserID;
-                    });
-            };
-
             resolve(info);
         } catch (e) {
             reject(e);
@@ -177,6 +154,39 @@ module.exports.limitedPost = (post) => {
                 "userID": post["UserID"],
                 "publicationDate": post["PublicationDate"]
             };
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};
+
+module.exports.postOpinions = (post, offset) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let opinionsUsers = await DBModels.postsOpinions.findAll({
+                "where": {
+                    "PostID": post["ID"]
+                },
+                "limit": 8,
+                "offset": offset
+            });
+
+            info["likesUsers"] = opinionsUsers
+                .filter((opn) => {
+                    if (opn.IsLike) return true;
+                })
+                .map((opn) => {
+                    return opn.UserID;
+                });
+
+            info["dislikesUsers"] = opinionsUsers
+                .filter((opn) => {
+                    if (!opn.IsLike) return true;
+                }).map((opn) => {
+                    return opn.UserID;
+                });
 
             resolve(info);
         } catch (e) {

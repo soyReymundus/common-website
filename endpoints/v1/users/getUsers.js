@@ -22,7 +22,14 @@ router.use((req, res, next) => {
 
 router.get("/", async (req, res) => {
     let where = {};
+    let offset = 0;
     let or = [];
+
+    if (req.query["offset"]) {
+        offset = parseInt(req.query["offset"]);
+
+        if (isNaN(offset)) offset = 0;
+    };
 
     if (req.query["username"]) {
         let queryParam = searchUtilities.parseQuery(req.query["username"]);
@@ -66,7 +73,8 @@ router.get("/", async (req, res) => {
 
     let rawUsers = await DBModels.users.findAll({
         "where": where,
-        "limit": 8
+        "limit": 8,
+        "offset": offset
     });
 
     let users = [];

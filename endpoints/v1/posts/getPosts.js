@@ -16,7 +16,14 @@ const emailResponses = require("../../../constants/emailResponses.js");
 
 router.get("/", async (req, res) => {
     let where = {};
+    let offset = 0;
     let or = [];
+
+    if (req.query["offset"]) {
+        offset = parseInt(req.query["offset"]);
+
+        if (isNaN(offset)) offset = 0;
+    };
 
     if (req.query["title"]) {
         let queryParam = searchUtilities.parseQuery(req.query["title"]);
@@ -60,7 +67,8 @@ router.get("/", async (req, res) => {
 
     let rawPosts = await DBModels.posts.findAll({
         "where": where,
-        "limit": 8
+        "limit": 8,
+        "offset": offset
     });
 
     let posts = [];

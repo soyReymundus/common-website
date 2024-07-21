@@ -812,5 +812,13 @@ module.exports = {
             "es": "Publicación modificada exitosamente.",
             "ja": "投稿が正常に更新されました。"
         }
-    }
+    },
+    3012: {
+        "status": 200,
+        "message": {
+            "en": "Opinions of the post successfully retrieved.",
+            "es": "Opiniones de la publicación obtenidas exitosamente.",
+            "ja": "投稿の意見が正常に取得されました。"
+        }
+    },
 };
