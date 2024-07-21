@@ -165,6 +165,8 @@ module.exports.limitedPost = (post) => {
 module.exports.postOpinions = (post, offset) => {
     return new Promise(async (resolve, reject) => {
         try {
+            let info = {};
+
             let opinionsUsers = await DBModels.postsOpinions.findAll({
                 "where": {
                     "PostID": post["ID"]

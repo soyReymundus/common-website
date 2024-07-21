@@ -18,7 +18,7 @@ router.use((req, res, next) => {
     next();
 });
 
-router.use("opinions", require("./postOpinions.js"));
+router.use("/opinions", require("./postOpinions.js"));
 
 router.use(
     require("./getPost.js"),

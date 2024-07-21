@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
     };
 
     return responseManager(req, res, responsesEnum.POST_OPINIONS_SUCCESSFULLY_RETRIEVED, {
-        opinions: extractInfo.postOpinions(post, offset)
+        opinions: await extractInfo.postOpinions(req.post, offset)
     });
 });
 
