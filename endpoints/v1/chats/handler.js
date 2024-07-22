@@ -12,51 +12,46 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.param('post', async (req, res, next, post) => {
-    if (isNaN(parseInt(post))) return responseManager(req, res, responsesEnum.POST_NOT_FOUND);
+router.param('chat', async (req, res, next, chat) => {
+    if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
+    if (isNaN(parseInt(chat))) return responseManager(req, res, responsesEnum.CHAT_NOT_FOUND);
 
-    let p = await DBModels.posts.findOne({
+    let c = await DBModels.chats.findOne({
         "where": {
-            "ID": post
+            "ID": chat
         }
     });
 
-    if (p == null) return responseManager(req, res, responsesEnum.POST_NOT_FOUND);
+    if (c == null) return responseManager(req, res, responsesEnum.CHAT_NOT_FOUND);
 
-    if (p["Status"] == statusEnum.posts["HIDDEN"]) {
+    if (req.me.ID != c["User2"] && req.me.ID != c["User"]) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
+
+    if (c["Status"] == statusEnum.chats["HIDDEN"]) {
         if (
-            (req.path != "/" + p["ID"])
+            (req.path != "/" + c["ID"])
             ||
             (req.method != "GET" && req.method != "HEAD")
         ) {
-            let reason = await DBModels.postsPunishments.findOne({
+            let reason = await DBModels.chatsPunishments.findOne({
                 "where": {
-                    PostID: p["ID"],
+                    PostID: c["ID"],
                     Removed: false
                 }
             });
-    
-            if (reason.LegalPunishment) return responseManager(req, res, responsesEnum.POST_CENSORED);
-            
-            return responseManager(req, res, responsesEnum.POST_HIDDEN);
+
+            if (reason.LegalPunishment) return responseManager(req, res, responsesEnum.CHAT_CENSORED);
+
+            return responseManager(req, res, responsesEnum.CHAT_HIDDEN);
         };
     };
 
-    if (p["Status"] == statusEnum.posts["DELETED"]) {
-        if (
-            (req.path != "/" + p.ID)
-            ||
-            (req.method != "GET" && req.method != "HEAD")
-        ) return responseManager(req, res, responsesEnum.POST_DELETED);
-    };
-
-    req.post = p;
+    req.chat = c;
 
     next();
 });
 
-router.use("/:post", require("./postHandler.js"));
-router.use("/", require("./postsHandler.js"));
+//router.use("/:chat", require("./chatHandler.js"));
+//router.use("/", require("./chatsHandler.js"));
 
 //BLANK PAGE
 router.get("/", (req, res) => {

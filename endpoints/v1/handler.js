@@ -96,7 +96,7 @@ router.use(async (req, res, next) => {
             if (req.path.startsWith("/files") && (req.method == "GET" || req.method == "HEAD")) return next();
             if (req.path == "/auth" && (req.method == "GET" || req.method == "HEAD")) return next();
             if ((req.path == "/users/me" || req.path == "/users/" + req.me.ID || req.path == "/users/@" + req.me.Username) && (req.method == "PATCH" || req.method == "DELETE")) return next();
-            
+
             return responseManager(req, res, responsesEnum.TOS_NOT_ACCEPTED);
         };
     };
@@ -107,6 +107,7 @@ router.use(async (req, res, next) => {
 router.use(json());
 router.use("/auth", require("./auth/handler.js"));
 router.use("/users", require("./users/handler.js"));
+router.use("/chats", require("./chats/handler.js"));
 router.use("/posts", require("./posts/handler.js"));
 
 router.use((req, res, next) => {

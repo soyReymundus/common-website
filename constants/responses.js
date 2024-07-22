@@ -790,7 +790,7 @@ module.exports = {
         }
     },
     3009: {
-        "status": 400,
+        "status": 404,
         "message": {
             "en": "The post you are trying to reply to does not exist.",
             "es": "La publicación a la que intentas responder no existe.",
@@ -821,4 +821,100 @@ module.exports = {
             "ja": "投稿の意見が正常に取得されました。"
         }
     },
+    3013: {
+        "status": 403,
+        "message": {
+            "en": "The post you are trying to reply to does was hidden.",
+            "es": "La publicación a la que intentas responder fue ocultado.",
+            "ja": "返信しようとしている投稿は非表示にされました。"
+        }
+    },
+    3014: {
+        "status": 403,
+        "message": {
+            "en": "The post you are trying to reply to was deleted.",
+            "es": "La publicación a la que intentas responder fue eliminado.",
+            "ja": "返信しようとしている投稿は削除されました。"
+        }
+    },
+    4000: {
+        "status": 200,
+        "message": {
+            "en": "Chat successfully retrieved.",
+            "es": "Chat obtenido exitosamente.",
+            "ja": "チャットが正常に取得されました。"
+        }
+    },
+    4001: {
+        "status": 200,
+        "message": {
+            "en": "Chats successfully retrieved.",
+            "es": "Chats obtenidos exitosamente.",
+            "ja": "チャットが正常に取得されました。"
+        }
+    },
+    4002: {
+        "status": 404,
+        "message": {
+            "en": "Chat not found.",
+            "es": "Chat no encontrado.",
+            "ja": "チャットが見つかりません。"
+        }
+    },
+    4003: {
+        "status": 403,
+        "message": {
+            "en": "The chat is hidden.",
+            "es": "El chat está oculto.",
+            "ja": "チャットは非表示にされています。"
+        }
+    },
+    4004: {
+        "status": 451,
+        "message": {
+            "en": "The chat is censored.",
+            "es": "El chat está censurado.",
+            "ja": "チャットは法的な理由で検閲されています。"
+        }
+    },
+    4005: {
+        "status": 200,
+        "message": {
+            "en": "Chat successfully closed.",
+            "es": "Chat cerrado con éxito.",
+            "ja": "チャットが正常に終了しました。"
+        }
+    },
+    4006: {
+        "status": 201,
+        "message": {
+            "en": "Chat successfully created.",
+            "es": "Chat creado exitosamente.",
+            "ja": "チャットが正常に作成されました。"
+        }
+    },
+    4007: {
+        "status": 404,
+        "message": {
+            "en": "The user you are trying to message to does not exist.",
+            "es": "El usuario al que estás intentando escribir no existe.",
+            "ja": "メッセージを送ろうとしているユーザーは存在しません。"
+        }
+    },
+    4008: {
+        "status": 403,
+        "message": {
+            "en": "The user you are trying to message to was banned.",
+            "es": "El usuario al que estás intentando escribir fue suspendido.",
+            "ja": "メッセージを送ろうとしているユーザーは禁止されています。"
+        }
+    },
+    4009: {
+        "status": 403,
+        "message": {
+            "en": "The user you are trying to message to was deleted.",
+            "es": "El usuario al que estás intentando escribir fue eliminado.",
+            "ja": "メッセージを送ろうとしているユーザーは削除されました。"
+        }
+    }
 };

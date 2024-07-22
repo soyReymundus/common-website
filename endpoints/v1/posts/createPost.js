@@ -46,7 +46,10 @@ router.post("/", async (req, res) => {
             }
         });
 
-        if (p == null) return responseManager(req, res, responsesEnum.INVALID_POSTID);
+        if (p == null) return responseManager(req, res, responsesEnum.POSTID_NOT_FOUND);
+
+        if (p["Status"] == statusEnum.posts["HIDDEN"]) return responseManager(req, res, responsesEnum.POSTID_HIDDEN);
+        if (p["Status"] == statusEnum.posts["DELETED"]) return responseManager(req, res, responsesEnum.POSTID_DELETED);
 
         if (await relationshipsChecker.checkBlock(p.UserID, req.me.ID)) return responseManager(req, res, responsesEnum.YOU_ARE_BLOCKED);
         if (await relationshipsChecker.checkBlock(req.me.ID, p.UserID)) return responseManager(req, res, responsesEnum.YOU_HAVE_BLOCKED);

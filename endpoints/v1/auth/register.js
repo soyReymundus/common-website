@@ -3,6 +3,7 @@ const { Router } = require("express");
 const router = Router();
 const { Op } = require('sequelize');
 const { createHash } = require("crypto");
+const parser = require('accept-language-parser');
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
 const DBModels = require("../../../constants/DBModels.js");
@@ -21,6 +22,7 @@ router.use((req, res, next) => {
 router.post("/", async (req, res) => {
     if (req.me != undefined) return responseManager(req, res, responsesEnum.ALREADY_AUTHENTICATED);
     let body = req.body;
+    let language = process.serverConfig["defaultLanguage"];
 
     if (typeof body.birthdate == "undefined" || typeof body.email == "undefined" || typeof body.username == "undefined" || typeof body.password == "undefined") return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
     if (typeof body.birthdate != "number" || typeof body.email != "string" || typeof body.username != "string" || typeof body.password != "string") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
@@ -52,11 +54,31 @@ router.post("/", async (req, res) => {
     let date = new Date();
     let UsernameCoolDown = new Date(date.setMonth(date.getMonth() + 1));
 
+    if (req.headers["accept-language"]) {
+        let languages = parser.parse(req.headers["accept-language"]);
+
+        for (let index = 0; index < languages.length; index++) {
+            const l = languages[index];
+
+            let matchedLanguage = process.serverConfig["languages"].find(lang => lang.code === l.code);
+
+            if (matchedLanguage) {
+                if (matchedLanguage.regions.includes(l.region)) {
+                    language = `${l.code}-${l.region}`;
+                } else {
+                    language = l.code;
+                };
+                break;
+            };
+        };
+    };
+
     await DBModels.users.create({
         "Email": body.email,
         "Username": body.username,
         "Password": hashedPassword,
         "BirthDate": body.birthdate,
+        "Language": language,
         "CreationDate": Date.now(),
         "UsernameCoolDown": UsernameCoolDown.getTime(),
         "ContractID": process.serverConfig["actualToS"]

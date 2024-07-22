@@ -13,7 +13,7 @@ module.exports = (req, res, index, data = null) => {
     let responseElement = responsesList[index];
     let msg = responseElement.message[process.serverConfig["defaultLanguage"]];
 
-    var languages = lanParser.parse(req.headers["accept-language"]);
+    let languages = lanParser.parse(req.headers["accept-language"]);
 
     for (let index = 0; index < languages.length; index++) {
         const language = languages[index];
