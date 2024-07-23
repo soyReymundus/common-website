@@ -916,5 +916,13 @@ module.exports = {
             "es": "El usuario al que estás intentando escribir fue eliminado.",
             "ja": "メッセージを送ろうとしているユーザーは削除されました。"
         }
+    },
+    4010: {
+        "status": 403,
+        "message": {
+            "en": "The user you are trying to message to is not your friend.",
+            "es": "El usuario al que estás intentando escribir no es tu amigo.",
+            "ja": "メッセージを送ろうとしているユーザーはあなたの友達ではありません。"
+        }
     }
 };

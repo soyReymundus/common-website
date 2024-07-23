@@ -24,7 +24,13 @@ router.param('chat', async (req, res, next, chat) => {
 
     if (c == null) return responseManager(req, res, responsesEnum.CHAT_NOT_FOUND);
 
-    if (req.me.ID != c["User2"] && req.me.ID != c["User"]) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
+    let participants = await DBModels.chatParticipants.findAll({
+        "where": {
+            "ChatID": c["ID"]
+        }
+    });
+
+    if (!participants.some(participants => participants.UserID == req.me.ID)) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
 
     if (c["Status"] == statusEnum.chats["HIDDEN"]) {
         if (
@@ -45,13 +51,14 @@ router.param('chat', async (req, res, next, chat) => {
         };
     };
 
+    req.chatParticipants = participants;
     req.chat = c;
 
     next();
 });
 
 //router.use("/:chat", require("./chatHandler.js"));
-//router.use("/", require("./chatsHandler.js"));
+router.use("/", require("./chatsHandler.js"));
 
 //BLANK PAGE
 router.get("/", (req, res) => {

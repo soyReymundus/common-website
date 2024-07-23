@@ -89,32 +89,29 @@ CREATE TABLE Users (
     UNIQUE (Username)
 );
 
-CREATE TABLE ChatsInfo (
-    ID int NOT NULL AUTO_INCREMENT,
-    UserID int NOT NULL,
-    Unread int,
-    closed BOOL NOT NULL,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (UserID) REFERENCES Users(ID)
-);
-
 CREATE TABLE Chats (
     ID int NOT NULL AUTO_INCREMENT,
-    User int NOT NULL,
-    User2 int NOT NULL,
-    LastMessageID int NOT NULL DEFAULT 1,
+    LastMessage BIGINT NOT NULL DEFAULT 1,
     Status int NOT NULL DEFAULT 1,
     PRIMARY KEY (ID),
-    FOREIGN KEY (Status) REFERENCES ChatStatus(ID),
-    FOREIGN KEY (User) REFERENCES ChatsInfo(ID),
-    FOREIGN KEY (User2) REFERENCES ChatsInfo(ID)
+    FOREIGN KEY (Status) REFERENCES ChatStatus(ID)
+);
+
+CREATE TABLE ChatParticipants (
+    ChatID int NOT NULL,
+    UserID int NOT NULL,
+    Unread int DEFAULT 0,
+    Closed BOOL NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (ChatID, UserID),
+    FOREIGN KEY (ChatID) REFERENCES Chats(ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
 
 CREATE TABLE Messages (
     ID int NOT NULL,
     ChatID int NOT NULL,
     UserID int NOT NULL,
-    Content varchar(2000),
+    Content varchar(2000) NOT NULL,
     Attachments varchar(325),
     PublicationDate BIGINT NOT NULL,
     LastUpdate BIGINT,

@@ -242,16 +242,44 @@ module.exports = Object.freeze({
         tableName: 'UsersBlocks',
         timestamps: false
     }),
-    chatsInfo: sequelize.define('ChatsInfo', {
+    chats: sequelize.define('Chats', {
         ID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
+            primaryKey: true
+        },
+        LastMessage: {
+            type: DataTypes.BIGINT,
+            defaultValue: 1,
+            allowNull: false,
+        },
+        Status: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1,
+            references: {
+                model: 'ChatStatuses',
+                key: 'ID'
+            }
+        }
+    }, {
+        tableName: 'Chats',
+        timestamps: false
+    }),
+    chatParticipants: sequelize.define('ChatParticipants', {
+        ChatID: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
-            allowNull: false
+            references: {
+                model: 'Chats',
+                key: 'ID'
+            }
         },
         UserID: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            primaryKey: true,
             references: {
                 model: 'Users',
                 key: 'ID'
@@ -259,55 +287,15 @@ module.exports = Object.freeze({
         },
         Unread: {
             type: DataTypes.INTEGER,
-            allowNull: true
+            defaultValue: 0
         },
-        closed: {
+        Closed: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: false
         }
     }, {
-        tableName: 'ChatsInfo',
-        timestamps: false
-    }),
-    chats: sequelize.define('Chats', {
-        ID: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        User: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'ChatsInfo',
-                key: 'ID'
-            }
-        },
-        User2: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'ChatsInfo',
-                key: 'ID'
-            }
-        },
-        LastMessageID: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1
-        },
-        Status: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1,
-            references: {
-                model: 'ChatStatus',
-                key: 'ID'
-            }
-        }
-    }, {
-        tableName: 'Chats',
+        tableName: 'ChatParticipants',
         timestamps: false
     }),
     chatsPunishments: sequelize.define('ChatsPunishments', {
@@ -363,7 +351,8 @@ module.exports = Object.freeze({
             }
         },
         Content: {
-            type: DataTypes.STRING(2000)
+            type: DataTypes.STRING(2000),
+            allowNull: false
         },
         Attachments: {
             type: DataTypes.STRING(325)
@@ -487,4 +476,14 @@ module.exports = Object.freeze({
         tableName: 'PostsOpinions',
         timestamps: false
     })
+});
+
+module.exports.chats.hasMany(module.exports.chatParticipants, {
+    foreignKey: 'ChatID',
+    as: 'ChatParticipants'
+});
+
+module.exports.chatParticipants.belongsTo(module.exports.chats, {
+    foreignKey: 'ChatID',
+    as: 'Chats'
 });

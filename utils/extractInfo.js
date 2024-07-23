@@ -196,3 +196,45 @@ module.exports.postOpinions = (post, offset) => {
         };
     });
 };
+
+module.exports.chat = (chat, participants, userID) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let info = {
+                "ID": chat["ID"],
+                "lastMessage": chat["LastMessage"],
+                "participants": participants.map((p) => {
+                    return p.UserID
+                })
+            };
+
+            if (userID) {
+                let index = participants.findIndex(p => p.UserID == userID);
+
+                info["unread"] = participants[index]["Unread"];
+                info["closed"] = participants[index]["Closed"];
+            };
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};
+
+module.exports.limitedChat = (chat, participants, userID) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let info = {
+                "ID": chat["ID"],
+                "participants": participants.map((p) => {
+                    return p.UserID
+                })
+            };
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};
