@@ -924,5 +924,13 @@ module.exports = {
             "es": "El usuario al que estás intentando escribir no es tu amigo.",
             "ja": "メッセージを送ろうとしているユーザーはあなたの友達ではありません。"
         }
+    },
+    4011: {
+        "status": 409,
+        "message": {
+            "en": "You can not send a message to yourself.",
+            "es": "No puedes enviarte un mensaje a ti mismo.",
+            "ja": "自分にメッセージを送ることはできません。"
+        }
     }
 };

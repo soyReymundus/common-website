@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
         "where": {
             "ID": body.userID
         }
-    }); console.log(body.userID)
+    });
 
     if (u == null) return responseManager(req, res, responsesEnum.USERID_NOT_FOUND);
     if (u["Status"] == statusEnum.users["BANNED"]) return responseManager(req, res, responsesEnum.USERID_BANNED);

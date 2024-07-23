@@ -46,6 +46,9 @@ router.get("/", async (req, res) => {
                 "Closed": false
             }
         }],
+        "order": [
+            ['LastMessage', 'DESC']
+        ],
         "where": where,
         "limit": 8,
         "offset": offset
