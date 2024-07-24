@@ -112,7 +112,7 @@ CREATE TABLE Messages (
     ChatID int NOT NULL,
     MessageID int,
     UserID int NOT NULL,
-    Content varchar(2000) NOT NULL,
+    Content varchar(2000),
     Attachments varchar(325),
     PublicationDate BIGINT NOT NULL,
     LastUpdate BIGINT,

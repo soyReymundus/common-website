@@ -356,7 +356,7 @@ module.exports = Object.freeze({
         },
         Content: {
             type: DataTypes.STRING(2000),
-            allowNull: false
+            allowNull: true
         },
         Attachments: {
             type: DataTypes.STRING(325)

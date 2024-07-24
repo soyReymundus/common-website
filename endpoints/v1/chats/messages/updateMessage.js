@@ -27,6 +27,8 @@ router.patch("/", async (req, res) => {
 
     if (!isThereChanges) return responseManager(req, res, responsesEnum.NOT_JSON_PARAM);
 
+    req.message["LastUpdate"] = Date.now();
+
     await req.message.save();
 
     responseManager(req, res, responsesEnum.MESSAGE_SUCCESSFULLY_UPDATE);
