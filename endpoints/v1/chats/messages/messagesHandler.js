@@ -19,7 +19,8 @@ router.use((req, res, next) => {
 });
 
 router.use(
-    require("./getMessages.js")
+    require("./getMessages.js"),
+    require("./createMessage.js")
 );
 
 module.exports = router;

@@ -976,27 +976,34 @@ module.exports = {
         }
     },
     4018: {
+        "status": 200,
+        "message": {
+            "en": "Message successfully deleted.",
+            "es": "Mensaje eliminada con éxito."
+        }
+    },
+    4019: {
         "status": 403,
         "message": {
             "en": "You can only attach a maximum of 4 files per message.",
             "es": "Sólo puedes adjuntar un máximo de 4 archivos por mensaje."
         }
     },
-    4019: {
+    4020: {
         "status": 422,
         "message": {
             "en": "The attachment is not valid.",
             "es": "El archivo adjunto no es válido."
         }
     },
-    4020: {
+    4021: {
         "status": 422,
         "message": {
             "en": "The message must be between 1 and 2000 in length.",
             "es": "El mensaje debe tener entre 1 y 2000 de longitud."
         }
     },
-    4021: {
+    4022: {
         "status": 409,
         "message": {
             "en": "The message you are trying to reply to does not exist.",

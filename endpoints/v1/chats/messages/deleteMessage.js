@@ -1,26 +1,24 @@
+const jwt = require('jsonwebtoken');
 const { Router } = require("express");
 const router = Router();
 const { Op } = require('sequelize');
-const jwt = require('jsonwebtoken');
 const { createHash } = require("crypto");
 const DBManager = require("../../../../utils/DBManager.js");
 const emailManager = require("../../../../utils/emailManager.js");
-const DBModels = require("../../../../constants/DBModels.js");
+const DBTables = require("../../../../constants/DBModels.js");
 const statusEnum = require("../../../../constants/statusEnum.js");
 const checkUserStatus = require("../../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../../constants/responsesEnum.js");
 const responseManager = require("../../../../utils/responseManager.js");
 const emailResponses = require("../../../../constants/emailResponses.js");
 
-router.use((req, res, next) => {
-    if (req.method != "GET" && req.method != "HEAD" && req.method != "DELETE" && req.method != "PATCH") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
+router.delete("/", async (req, res) => {
+    if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
+    if (req.me.ID != req.message.UserID) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
 
-    next();
+    await req.message.destroy();
+
+    return responseManager(req, res, responsesEnum.MESSAGE_SUCCESSFULLY_DELETED);
 });
-
-router.use(
-    require("./getMessage.js"),
-    require("./updateMessage.js")
-);
 
 module.exports = router;

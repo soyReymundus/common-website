@@ -14,6 +14,7 @@ const responseManager = require("../../../../utils/responseManager.js");
 const emailResponses = require("../../../../constants/emailResponses.js");
 
 router.patch("/", async (req, res) => {
+    if (req.me.ID != req.message.UserID) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
     let body = req.body;
     let isThereChanges = false;
 

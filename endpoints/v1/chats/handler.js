@@ -57,6 +57,7 @@ router.param('chat', async (req, res, next, chat) => {
     next();
 });
 
+router.use("/:chat/messages", require("./messages/handler.js"));
 router.use("/:chat", require("./chatHandler.js"));
 router.use("/", require("./chatsHandler.js"));
 
