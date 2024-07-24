@@ -61,7 +61,6 @@ router.post("/", async (req, res) => {
         }
     });
 
-    [req.me.ID, body.userID]
     if (c && c["dataValues"]) {
         if (c["dataValues"]["Status"] == statusEnum.chats["OK"]) {
             let participants = await DBModels.chatParticipants.findAll({

@@ -880,9 +880,9 @@ module.exports = {
     4005: {
         "status": 200,
         "message": {
-            "en": "Chat successfully closed.",
-            "es": "Chat cerrado con éxito.",
-            "ja": "チャットが正常に終了しました。"
+            "en": "Chat successfully updated.",
+            "es": "El chat se actualizó con éxito.",
+            "ja": "チャットが正常に更新されました。"
         }
     },
     4006: {
@@ -931,6 +931,76 @@ module.exports = {
             "en": "You can not send a message to yourself.",
             "es": "No puedes enviarte un mensaje a ti mismo.",
             "ja": "自分にメッセージを送ることはできません。"
+        }
+    },
+    4012: {
+        "status": 409,
+        "message": {
+            "en": "You cannot mark more messages as read than exist.",
+            "es": "No puedes marcar más mensajes como leídos de los que existen."
+        }
+    },
+    4013: {
+        "status": 200,
+        "message": {
+            "en": "Message successfully retrieved.",
+            "es": "Mensaje obtenido exitosamente."
+        }
+    },
+    4014: {
+        "status": 200,
+        "message": {
+            "en": "Messages successfully retrieved.",
+            "es": "Mensajes obtenidos exitosamente."
+        }
+    },
+    4015: {
+        "status": 404,
+        "message": {
+            "en": "Message not found.",
+            "es": "Mensaje no encontrado."
+        }
+    },
+    4016: {
+        "status": 200,
+        "message": {
+            "en": "Message successfully updated.",
+            "es": "El mensaje se actualizó con éxito."
+        }
+    },
+    4017: {
+        "status": 201,
+        "message": {
+            "en": "Message successfully created.",
+            "es": "Mensaje creado exitosamente."
+        }
+    },
+    4018: {
+        "status": 403,
+        "message": {
+            "en": "You can only attach a maximum of 4 files per message.",
+            "es": "Sólo puedes adjuntar un máximo de 4 archivos por mensaje."
+        }
+    },
+    4019: {
+        "status": 422,
+        "message": {
+            "en": "The attachment is not valid.",
+            "es": "El archivo adjunto no es válido."
+        }
+    },
+    4020: {
+        "status": 422,
+        "message": {
+            "en": "The message must be between 1 and 2000 in length.",
+            "es": "El mensaje debe tener entre 1 y 2000 de longitud."
+        }
+    },
+    4021: {
+        "status": 409,
+        "message": {
+            "en": "The message you are trying to reply to does not exist.",
+            "es": "El mensaje que intentas responder no existe."
         }
     }
 };

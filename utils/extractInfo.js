@@ -238,3 +238,24 @@ module.exports.limitedChat = (chat, participants, userID) => {
         };
     });
 };
+
+module.exports.message = (message) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let info = {
+                "ID": message["ID"],
+                "chatID": message["ChatID"],
+                "userID": message["UserID"],
+                "content": message["Content"],
+                "publicationDate": message["PublicationDate"]
+            };
+
+            if (message["Attachments"]) info["attachments"] = message["Attachments"].split(":");
+            if (message["LastUpdate"]) info["lastUpdate"] = message["LastUpdate"];
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};

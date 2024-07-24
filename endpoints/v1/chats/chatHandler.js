@@ -20,7 +20,7 @@ router.use((req, res, next) => {
 
 router.use(
     require("./getChat.js"),
-    //require("./updateChat.js")
+    require("./updateChat.js")
 );
 
 module.exports = router;

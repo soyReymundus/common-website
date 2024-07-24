@@ -328,7 +328,7 @@ module.exports = Object.freeze({
         tableName: 'ChatsPunishments',
         timestamps: false
     }),
-    message: sequelize.define('Messages', {
+    messages: sequelize.define('Messages', {
         ID: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -341,6 +341,10 @@ module.exports = Object.freeze({
                 model: 'Chats',
                 key: 'ID'
             }
+        },
+        MessageID: {
+            type: DataTypes.INTEGER,
+            allowNull: true
         },
         UserID: {
             type: DataTypes.INTEGER,

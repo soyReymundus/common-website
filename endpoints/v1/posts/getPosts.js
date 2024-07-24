@@ -74,10 +74,10 @@ router.get("/", async (req, res) => {
     let posts = [];
 
     for (let index = 0; index < rawPosts.length; index++) {
-        const rawUPost = rawPosts[index];
-        let privilege = (req.me && req.me.ID == rawUPost.UserID);
+        const rawPost = rawPosts[index];
+        let privilege = (req.me && req.me.ID == rawPost.UserID);
 
-        posts.push(await extractInfo.post(rawUPost, privilege));
+        posts.push(await extractInfo.post(rawPost, privilege));
     };
 
     responseManager(req, res, responsesEnum.POSTS_SUCCESSFULLY_RETRIEVED, {

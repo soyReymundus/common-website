@@ -110,6 +110,7 @@ CREATE TABLE ChatParticipants (
 CREATE TABLE Messages (
     ID int NOT NULL,
     ChatID int NOT NULL,
+    MessageID int,
     UserID int NOT NULL,
     Content varchar(2000) NOT NULL,
     Attachments varchar(325),

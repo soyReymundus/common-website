@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 
         let reason = await DBModels.chatsPunishments.findOne({
             "where": {
-                PostID: req.chat.ID,
+                ChatID: req.chat.ID,
                 Removed: false
             }
         });
@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 
         chatData = await extractInfo.limitedChat(req.chat);
     } else {
-        chatData = await extractInfo.chat(req.chat, req.chatParticipants, req.chat.ID);
+        chatData = await extractInfo.chat(req.chat, req.chatParticipants, req.me.ID);
     };
 
     responseManager(req, res, responseNumber, {
