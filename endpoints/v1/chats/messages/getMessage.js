@@ -14,8 +14,14 @@ const responseManager = require("../../../../utils/responseManager.js");
 const emailResponses = require("../../../../constants/emailResponses.js");
 
 router.get("/", async (req, res) => {
+    let index = req.chatParticipants.findIndex(p => p.UserID == req.me.ID);
+    let chatInfo = req.chatParticipants[index];
+    chatInfo["Closed"] = false;
+    await chatInfo.save();
+
     responseManager(req, res, responsesEnum.MESSAGE_SUCCESSFULLY_RETRIEVED, {
-        chat: await extractInfo.message(req.message)
+        message: await extractInfo.message(req.message),
+        chat: await extractInfo.chat(req.chat, req.chatParticipants, req.me.ID)
     });
 });
 

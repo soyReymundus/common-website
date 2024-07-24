@@ -16,11 +16,10 @@ const emailResponses = require("../../../constants/emailResponses.js");
 router.patch("/", async (req, res) => {
     let body = req.body;
     let isThereChanges = false;
-    let index = req.participants.findIndex(p => p.UserID == userID);
-    let chatInfo =  req.participants[index];
+    let index = req.chatParticipants.findIndex(p => p.UserID == req.me["ID"]);
+    let chatInfo =  req.chatParticipants[index];
 
-
-    if (body.closed) {
+    if (typeof body.closed != "undefined") {
         if (typeof body.closed != "boolean") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         
         chatInfo["Closed"] = body.closed;
@@ -28,10 +27,10 @@ router.patch("/", async (req, res) => {
     };
 
     if (body.unread) {
-        if (typeof body.content != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
+        if (typeof body.unread != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         if (0 > body.unread) return responseManager(req, res, responsesEnum.INVALID_UNREAD_PARAM);
         
-        const messageCount = await DBModels.message.count({
+        const messageCount = await DBModels.messages.count({
             where: {
                 ChatID: req.chat.ID
             }

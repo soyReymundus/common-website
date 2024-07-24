@@ -331,6 +331,7 @@ module.exports = Object.freeze({
     messages: sequelize.define('Messages', {
         ID: {
             type: DataTypes.INTEGER,
+            autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },
@@ -359,7 +360,8 @@ module.exports = Object.freeze({
             allowNull: true
         },
         Attachments: {
-            type: DataTypes.STRING(325)
+            type: DataTypes.STRING(325),
+            allowNull: true
         },
         PublicationDate: {
             allowNull: false,

@@ -108,7 +108,7 @@ CREATE TABLE ChatParticipants (
 );
 
 CREATE TABLE Messages (
-    ID int NOT NULL,
+    ID int NOT NULL AUTO_INCREMENT,
     ChatID int NOT NULL,
     MessageID int,
     UserID int NOT NULL,

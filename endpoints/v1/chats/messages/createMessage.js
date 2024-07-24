@@ -14,7 +14,7 @@ const responseManager = require("../../../../utils/responseManager.js");
 const emailResponses = require("../../../../constants/emailResponses.js");
 const relationshipsChecker = require("../../../../utils/relationshipsChecker.js");
 
-router.message("/", async (req, res) => {
+router.post("/", async (req, res) => {
     let body = req.body;
     let isValid = false;
     let now = Date.now()
@@ -28,7 +28,8 @@ router.message("/", async (req, res) => {
         if (typeof body.messageID != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
         let m = await DBModels.messages.findOne({
             "where": {
-                "ID": body.messageID
+                "ID": body.messageID,
+                "ChatID": req.chat.ID
             }
         });
 
@@ -61,6 +62,7 @@ router.message("/", async (req, res) => {
     responseManager(req, res, responsesEnum.MESSAGE_SUCCESSFULLY_CREATED);
 
     req.chat["LastMessage"] = now;
+    req.chat.save();
 
     for (let index = 0; index < req.chatParticipants.length; index++) {
         const participant = req.chatParticipants[index];

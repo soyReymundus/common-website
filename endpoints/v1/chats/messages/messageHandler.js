@@ -20,7 +20,8 @@ router.use((req, res, next) => {
 
 router.use(
     require("./getMessage.js"),
-    require("./updateMessage.js")
+    require("./updateMessage.js"),
+    require("./deleteMessage.js")
 );
 
 module.exports = router;

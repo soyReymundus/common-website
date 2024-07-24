@@ -69,8 +69,14 @@ router.get("/", async (req, res) => {
         messages.push(await extractInfo.message(rawMessage));
     };
 
+    let index = req.chatParticipants.findIndex(p => p.UserID == req.me.ID);
+    let chatInfo = req.chatParticipants[index];
+    chatInfo["Closed"] = false;
+    await chatInfo.save();
+
     responseManager(req, res, responsesEnum.MESSAGES_SUCCESSFULLY_RETRIEVED, {
-        messages: messages
+        messages: messages,
+        chat: await extractInfo.chat(req.chat, req.chatParticipants, req.me.ID)
     });
 });
 

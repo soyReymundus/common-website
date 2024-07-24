@@ -252,6 +252,7 @@ module.exports.message = (message) => {
 
             if (message["Attachments"]) info["attachments"] = message["Attachments"].split(":");
             if (message["LastUpdate"]) info["lastUpdate"] = message["LastUpdate"];
+            if (message["MessageID"]) info["messageID"] = message["MessageID"];
 
             resolve(info);
         } catch (e) {
