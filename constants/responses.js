@@ -937,77 +937,88 @@ module.exports = {
         "status": 409,
         "message": {
             "en": "You cannot mark more messages as read than exist.",
-            "es": "No puedes marcar más mensajes como leídos de los que existen."
+            "es": "No puedes marcar más mensajes como leídos de los que existen.",
+            "ja": "存在する以上のメッセージを既読にすることはできません。"
         }
     },
     4013: {
         "status": 200,
         "message": {
             "en": "Message successfully retrieved.",
-            "es": "Mensaje obtenido exitosamente."
+            "es": "Mensaje obtenido exitosamente.",
+            "ja": "メッセージが正常に取得されました。"
         }
     },
     4014: {
         "status": 200,
         "message": {
             "en": "Messages successfully retrieved.",
-            "es": "Mensajes obtenidos exitosamente."
+            "es": "Mensajes obtenidos exitosamente.",
+            "ja": "メッセージが正常に取得されました。"
         }
     },
     4015: {
         "status": 404,
         "message": {
             "en": "Message not found.",
-            "es": "Mensaje no encontrado."
+            "es": "Mensaje no encontrado.",
+            "ja": "メッセージが見つかりません。"
         }
     },
     4016: {
         "status": 200,
         "message": {
             "en": "Message successfully updated.",
-            "es": "El mensaje se actualizó con éxito."
+            "es": "El mensaje se actualizó con éxito.",
+            "ja": "メッセージが正常に更新されました。"
         }
     },
     4017: {
         "status": 201,
         "message": {
             "en": "Message successfully created.",
-            "es": "Mensaje creado exitosamente."
+            "es": "Mensaje creado exitosamente.",
+            "ja": "メッセージが正常に作成されました。"
         }
     },
     4018: {
         "status": 200,
         "message": {
             "en": "Message successfully deleted.",
-            "es": "Mensaje eliminada con éxito."
+            "es": "Mensaje eliminada con éxito.",
+            "ja": "メッセージが正常に削除されました。"
         }
     },
     4019: {
         "status": 403,
         "message": {
             "en": "You can only attach a maximum of 4 files per message.",
-            "es": "Sólo puedes adjuntar un máximo de 4 archivos por mensaje."
+            "es": "Sólo puedes adjuntar un máximo de 4 archivos por mensaje.",
+            "ja": "メッセージごとに最大4つのファイルしか添付できません。"
         }
     },
     4020: {
         "status": 422,
         "message": {
             "en": "The attachment is not valid.",
-            "es": "El archivo adjunto no es válido."
+            "es": "El archivo adjunto no es válido.",
+            "ja": "添付ファイルが無効です。"
         }
     },
     4021: {
         "status": 422,
         "message": {
             "en": "The message must be between 1 and 2000 in length.",
-            "es": "El mensaje debe tener entre 1 y 2000 de longitud."
+            "es": "El mensaje debe tener entre 1 y 2000 de longitud.",
+            "ja": "メッセージの長さは1から2000の間でなければなりません。"
         }
     },
     4022: {
         "status": 409,
         "message": {
             "en": "The message you are trying to reply to does not exist.",
-            "es": "El mensaje que intentas responder no existe."
+            "es": "El mensaje que intentas responder no existe.",
+            "ja": "返信しようとしているメッセージは存在しません。"
         }
     }
 };
