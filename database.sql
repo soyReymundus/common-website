@@ -110,13 +110,15 @@ CREATE TABLE NotificationsInbox (
 );
 
 CREATE TABLE Notifications (
+    ID int NOT NULL AUTO_INCREMENT,
     `FROM` int NOT NULL,
     `TO` int NOT NULL,
     `Type` int NOT NULL,
     CreationDate BIGINT NOT NULL,
+    PRIMARY KEY (ID),
     FOREIGN KEY (`Type`) REFERENCES NotificationsType(ID),
     FOREIGN KEY (`FROM`) REFERENCES Users(ID),
-    FOREIGN KEY (`TO`) REFERENCES NotificationsInbox(ID),
+    FOREIGN KEY (`TO`) REFERENCES NotificationsInbox(ID)
 );
 
 CREATE TABLE Chats (

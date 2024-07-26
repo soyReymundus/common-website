@@ -18,6 +18,13 @@ const relationshipsChecker = require("../../../../utils/relationshipsChecker.js"
 router.get("/", async (req, res) => {
     if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
     if (req.me.ID != req.user.ID) return responseManager(req, res, responsesEnum.UNAUTHORIZED);
+    let offset = 0;
+
+    if (req.query["offset"]) {
+        offset = parseInt(req.query["offset"]);
+
+        if (isNaN(offset)) offset = 0;
+    };
 
     let inbox = await DBModels.notificationsInbox.findOne({
         "where": {
@@ -25,14 +32,19 @@ router.get("/", async (req, res) => {
         }
     });
 
-    let notis = await DBModels.notifications.findOne({
+    let notis = await DBModels.notifications.findAll({
         "where": {
             "TO": inbox["ID"]
-        }
+        },
+        "limit": 8,
+        "offset": offset,
+        "order": [
+            ['CreationDate', 'DESC']
+        ]
     });
 
     responseManager(req, res, responsesEnum.INBOX_SUCCESSFULLY_RETRIEVED, {
-        inbox: extractInfo.inbox(inbox, notis)
+        inbox: await extractInfo.inbox(inbox, notis)
     });
 });
 

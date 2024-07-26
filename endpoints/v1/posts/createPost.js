@@ -69,7 +69,8 @@ router.post("/", async (req, res) => {
     let matches;
 
     while ((matches = regex.exec(body.content)) !== null) {
-        createNotification(req.me.ID, parseInt(matches[1]), statusEnum.NotificationsType.POST_METION);
+        createNotification(req.me.ID, parseInt(matches[1]), statusEnum.NotificationsType.POST_METION)
+            .catch((e) => { });
     };
 });
 

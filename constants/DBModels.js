@@ -492,7 +492,7 @@ module.exports = Object.freeze({
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: User,
+                model: 'Users',
                 key: 'ID'
             }
         },
@@ -505,11 +505,16 @@ module.exports = Object.freeze({
         timestamps: false
     }),
     notifications: sequelize.define('Notifications', {
+        ID: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         FROM: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: User,
+                model: 'Users',
                 key: 'ID'
             }
         },
@@ -517,7 +522,7 @@ module.exports = Object.freeze({
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: NotificationsInbox,
+                model: 'NotificationsInbox',
                 key: 'ID'
             }
         },
@@ -529,7 +534,7 @@ module.exports = Object.freeze({
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: NotificationsType,
+                model: 'NotificationsType',
                 key: 'ID'
             }
         }
