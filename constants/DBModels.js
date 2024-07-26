@@ -481,6 +481,61 @@ module.exports = Object.freeze({
     }, {
         tableName: 'PostsOpinions',
         timestamps: false
+    }),
+    notificationsInbox: sequelize.define('NotificationsInbox', {
+        ID: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        UserID: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: User,
+                key: 'ID'
+            }
+        },
+        Unread: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        }
+    }, {
+        tableName: 'NotificationsInbox',
+        timestamps: false
+    }),
+    notifications: sequelize.define('Notifications', {
+        FROM: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: User,
+                key: 'ID'
+            }
+        },
+        TO: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: NotificationsInbox,
+                key: 'ID'
+            }
+        },
+        CreationDate: {
+            type: DataTypes.BIGINT,
+            allowNull: false,
+        },
+        Type: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: NotificationsType,
+                key: 'ID'
+            }
+        }
+    }, {
+        tableName: 'Notifications',
+        timestamps: false
     })
 });
 

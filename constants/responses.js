@@ -717,6 +717,30 @@ module.exports = {
             "ja": "ユーザーが正常に削除されました。"
         }
     },
+    2044: {
+        "status": 200,
+        "message": {
+            "en": "Inbox successfully retrieved.",
+            "es": "Bandeja de entrada obtenida exitosamente.",
+            "ja": "受信箱が正常に取得されました。"
+        }
+    },
+    2045: {
+        "status": 200,
+        "message": {
+            "en": "Inbox successfully updated.",
+            "es": "Bandeja de entrada actualizada correctamente.",
+            "ja": "受信箱が正常に更新されました。"
+        }
+    },
+    2046: {
+        "status": 409,
+        "message": {
+            "en": "You cannot mark more notifications as read than exist.",
+            "es": "No puedes marcar como leídas más notificaciones que las que existen.",
+            "ja": "存在する以上の通知を既読にすることはできません。"
+        }
+    },
     3000: {
         "status": 200,
         "message": {

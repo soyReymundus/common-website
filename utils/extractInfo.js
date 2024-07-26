@@ -260,3 +260,24 @@ module.exports.message = (message) => {
         };
     });
 };
+
+module.exports.inbox = (inbox, notifications) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let info = {
+                "unread": inbox["Unread"],
+                "notifications": notifications.map((n) => {
+                    return {
+                        "from": n["FROM"],
+                        "type": n["Type"],
+                        "creationDate": n["CreationDate"]
+                    }
+                })
+            };
+
+            resolve(info);
+        } catch (e) {
+            reject(e);
+        };
+    });
+};

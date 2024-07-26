@@ -5,6 +5,7 @@ const { Op } = require('sequelize');
 const { createHash } = require("crypto");
 const parser = require('accept-language-parser');
 const DBManager = require("../../../../utils/DBManager.js");
+const createNotification = require("../../../../utils/createNotification.js");
 const emailManager = require("../../../../utils/emailManager.js");
 const DBModels = require("../../../../constants/DBModels.js");
 const statusEnum = require("../../../../constants/statusEnum.js");
@@ -66,7 +67,9 @@ router.post("/", async (req, res) => {
 
     for (let index = 0; index < req.chatParticipants.length; index++) {
         const participant = req.chatParticipants[index];
-        
+
+        createNotification(req.me.ID, participant.UserID, statusEnum.NotificationsType.INCOMING_MESSAGE);
+
         participant["Closed"] = false;
         participant["Unread"]++;
 

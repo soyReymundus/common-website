@@ -36,3 +36,11 @@ module.exports["codes"] = Object.freeze({
     RESET: 1,
     EMAIL: 2
 });
+
+module.exports["NotificationsType"] = Object.freeze({
+    FRIEND_REQUEST_ACCEPTED: 1,
+    INCOMING_FRIEND_REQUEST: 2,
+    POST_METION: 3,
+    POST_RESPONSE: 4,
+    INCOMING_MESSAGE: 5
+});

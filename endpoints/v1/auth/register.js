@@ -73,7 +73,7 @@ router.post("/", async (req, res) => {
         };
     };
 
-    await DBModels.users.create({
+    let user = await DBModels.users.create({
         "Email": body.email,
         "Username": body.username,
         "Password": hashedPassword,
@@ -86,10 +86,8 @@ router.post("/", async (req, res) => {
 
     responseManager(req, res, responsesEnum.EMAIL_VERIFICATION_REQUIRED);
 
-    let user = await DBModels.users.findOne({
-        "where": {
-            "Username": body.username
-        }
+    DBModels.notificationsInbox.create({
+        "UserID": user.ID,
     });
 
     let code = jwt.sign({

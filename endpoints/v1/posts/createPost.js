@@ -12,11 +12,13 @@ const checkUserStatus = require("../../../utils/checkUserStatus.js");
 const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
+const createNotification = require("../../../utils/createNotification.js");
 const relationshipsChecker = require("../../../utils/relationshipsChecker.js");
 
 router.post("/", async (req, res) => {
     if (!req.me) return responseManager(req, res, responsesEnum.UNAUTHENTICATED);
     let body = req.body;
+    let p;
     let post = {
         "UserID": req.me.ID,
         "PublicationDate": Date.now()
@@ -40,7 +42,7 @@ router.post("/", async (req, res) => {
     if (body.postID) {
         if (typeof body.postID != "number") return responseManager(req, res, responsesEnum.WRONG_JSON_PARAM);
 
-        let p = await DBModels.posts.findOne({
+        p = await DBModels.posts.findOne({
             "where": {
                 "ID": body.postID
             }
@@ -60,6 +62,15 @@ router.post("/", async (req, res) => {
     await DBModels.posts.create(post);
 
     responseManager(req, res, responsesEnum.POSTS_SUCCESSFULLY_CREATE);
+
+    if (body.postID) createNotification(req.me.ID, p.UserID, statusEnum.NotificationsType.POST_RESPONSE);
+
+    let regex = /<@(\d+)>/g;
+    let matches;
+
+    while ((matches = regex.exec(body.content)) !== null) {
+        createNotification(req.me.ID, parseInt(matches[1]), statusEnum.NotificationsType.POST_METION);
+    };
 });
 
 module.exports = router;

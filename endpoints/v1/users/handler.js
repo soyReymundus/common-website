@@ -76,6 +76,7 @@ router.param('user', async (req, res, next, user) => {
 });
 
 router.use("/:user/relationship", require("./userRelationship.js"));
+router.use("/:user/inbox", require("./inbox/handler.js"));
 router.use("/:user", require("./userHandler.js"));
 router.use("/", require("./getUsers.js"));
 

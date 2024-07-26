@@ -3,6 +3,7 @@ const { Router } = require("express");
 const router = Router();
 const { Op } = require('sequelize');
 const { createHash } = require("crypto");
+const createNotification = require("../../../utils/createNotification.js");
 const DBManager = require("../../../utils/DBManager.js");
 const emailManager = require("../../../utils/emailManager.js");
 const DBModels = require("../../../constants/DBModels.js");
@@ -56,6 +57,8 @@ router.post("/", async (req, res) => {
                     "TO": req.user.ID
                 });
 
+                createNotification(req.me.ID, req.user.ID, statusEnum.NotificationsType.INCOMING_FRIEND_REQUEST);
+
                 responseManager(req, res, responsesEnum.FRIEND_REQUEST_SUCCESSFULLY_SENT);
             };
             break;
@@ -88,6 +91,8 @@ router.post("/", async (req, res) => {
                 "User": req.me.ID,
                 "User2": req.user.ID
             });
+
+            createNotification(req.me.ID, req.user.ID, statusEnum.NotificationsType.FRIEND_REQUEST_ACCEPTED);
 
             responseManager(req, res, responsesEnum.FRIEND_REQUEST_SUCCESSFULLY_ACCEPTED);
             break;

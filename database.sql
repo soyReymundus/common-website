@@ -2,6 +2,18 @@ CREATE DATABASE CommonWeb;
 
 USE CommonWeb;
 
+CREATE TABLE NotificationsType (
+    ID int NOT NULL AUTO_INCREMENT,
+    Message varchar(32),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO NotificationsType (Message) VALUES ('Friend request accepted'); #1
+INSERT INTO NotificationsType (Message) VALUES ('Incoming friend request'); #2
+INSERT INTO NotificationsType (Message) VALUES ('Mention in a post'); #3
+INSERT INTO NotificationsType (Message) VALUES ('Response in a post'); #4
+INSERT INTO NotificationsType (Message) VALUES ('Incoming message'); #5
+
 CREATE TABLE ChatStatus (
     ID int NOT NULL AUTO_INCREMENT,
     Message varchar(32),
@@ -87,6 +99,24 @@ CREATE TABLE Users (
     FOREIGN KEY (Permissions) REFERENCES UserPermissions(ID),
     UNIQUE (Email),
     UNIQUE (Username)
+);
+
+CREATE TABLE NotificationsInbox (
+    ID int NOT NULL AUTO_INCREMENT,
+    UserID int NOT NULL,
+    Unread int DEFAULT 0,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+CREATE TABLE Notifications (
+    `FROM` int NOT NULL,
+    `TO` int NOT NULL,
+    `Type` int NOT NULL,
+    CreationDate BIGINT NOT NULL,
+    FOREIGN KEY (`Type`) REFERENCES NotificationsType(ID),
+    FOREIGN KEY (`FROM`) REFERENCES Users(ID),
+    FOREIGN KEY (`TO`) REFERENCES NotificationsInbox(ID),
 );
 
 CREATE TABLE Chats (
