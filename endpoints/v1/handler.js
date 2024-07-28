@@ -105,19 +105,20 @@ router.use(async (req, res, next) => {
 });
 
 router.use(json());
+
+router.use(require("./checkConfiguration.js"));
+router.use(require("./rateLimit.js"));
+router.use(require("./captcha.js"));
+
 router.use("/auth", require("./auth/handler.js"));
 router.use("/users", require("./users/handler.js"));
 router.use("/chats", require("./chats/handler.js"));
 router.use("/posts", require("./posts/handler.js"));
 
-router.use((req, res, next) => {
+//BLANK PAGE
+router.all("/", (req, res) => {
     if (req.method != "GET" && req.method != "HEAD") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
 
-    next();
-});
-
-//BLANK PAGE
-router.get("/", (req, res) => {
     responseManager(req, res, responsesEnum.OK);
 });
 

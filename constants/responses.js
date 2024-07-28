@@ -69,6 +69,13 @@ module.exports = {
             "ja": "1つ以上のQUERYパラメータに誤ったデータ型が含まれています。ドキュメントを参照してください。"
         }
     },
+    9: {
+        "status": 501,
+        "message": {
+            "en": "HTTP method not implemented.",
+            "es": "Método HTTP no implementado."
+        }
+    },
     100: {
         "status": 400,
         "message": {
@@ -136,9 +143,73 @@ module.exports = {
     108: {
         "status": 403,
         "message": {
+            "en": "Robots are not allowed.",
+            "es": "No se permiten robots.",
+            "ja": "ロボットは許可されていません。"
+        }
+    },
+    109: {
+        "status": 502,
+        "message": {
+            "en": "Could not connect to the servers of reCAPTCHA , please try again later.",
+            "es": "No se pudo conectar a los servidores de reCAPTCHA, por favor intenta de nuevo mas tarde."
+        }
+    },
+    110: {
+        "status": 504,
+        "message": {
+            "en": "The servers of reCAPTCHA have not responded, please try again later.",
+            "es": "Los servidores de reCAPTCHA no han respondido, por favor intenta de nuevo mas tarde."
+        }
+    },
+    111: {
+        "status": 502,
+        "message": {
+            "en": "The servers of reCAPTCHA gave an invalid response, please try again later.",
+            "es": "Los servidores de reCAPTCHA dieron una respuesta no válida, por favor intenta de nuevo mas tarde."
+        }
+    },
+    112: {
+        "status": 403,
+        "message": {
+            "en": "Please complete the captcha again.",
+            "es": "Por favor, complete el captcha nuevamente."
+        }
+    },
+    113: {
+        "status": 500,
+        "message": {
+            "en": "We had an error processing your captcha, please try again later.",
+            "es": "Tuvimos un error al procesar tu captcha, por favor inténtalo nuevamente más tarde."
+        }
+    },
+    114: {
+        "status": 403,
+        "message": {
             "en": "You do not have permission to perform that operation.",
             "es": "No tiene permiso para realizar esa operación.",
             "ja": "その操作を行う権限がありません。"
+        }
+    },
+    115: {
+        "status": 429,
+        "message": {
+            "en": "You are performing too many operations, please try again later.",
+            "es": "Estás realizando demasiadas operaciones, por favor intenta de nuevo mas tarde."
+        }
+    },
+    116: {
+        "status": 405,
+        "message": {
+            "en": "The endpoint is disabled.",
+            "es": "El endpoint está desactivada."
+        }
+    },
+    117: {
+        "status": 405,
+        "message": {
+            "en": "The path is disabled.",
+            "es": "La ruta está desactivada."
         }
     },
     1000: {

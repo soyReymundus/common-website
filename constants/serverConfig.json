@@ -5,6 +5,15 @@
     "minimunAge": 18,
     "legalMinimunAge": 13,
     "defaultLanguage": "en",
+    "methods": [
+        "GET",
+        "HEAD",
+        "POST",
+        "PATCH",
+        "DELETE",
+        "PUT",
+        "OPTIONS"
+    ],
     "theme": [
         "dark",
         "light"
@@ -12,22 +21,339 @@
     "languages": [
         {
             "code": "es",
-            "regions": ["419", "ES"]
+            "regions": [
+                "419",
+                "ES"
+            ]
         },
         {
             "code": "en",
-            "regions": ["US"]
+            "regions": [
+                "US"
+            ]
         },
         {
             "code": "ja",
-            "regions": ["JP"]
+            "regions": [
+                "JP"
+            ]
         }
     ],
     "x-powered-by": false,
     "root": {
-        "disable": false,
         "v1": {
-            "disable": false
+            "disable": false,
+            "routingDisabled": false,
+            "methods": [
+                "GET",
+                "HEAD"
+            ],
+            "captcha": {
+                "disable": true,
+                "max": 20000,
+                "every": 3600000
+            },
+            "ratelimit": {
+                "disable": true,
+                "max": 20000,
+                "every": 3600000
+            },
+            "auth": {
+                "disable": false,
+                "routingDisabled": false,
+                "methods": [
+                    "GET",
+                    "HEAD"
+                ],
+                "captcha": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "ratelimit": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "register": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "POST"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    }
+                },
+                "login": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "POST"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    }
+                },
+                "verify": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "PATCH"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    }
+                },
+                "reset": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "PATCH",
+                        "POST"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    }
+                }
+            },
+            "users": {
+                "disable": false,
+                "routingDisabled": false,
+                "methods": [
+                    "GET",
+                    "HEAD"
+                ],
+                "captcha": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "ratelimit": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "inbox": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "GET",
+                        "HEAD",
+                        "PATCH"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    }
+                },
+                "relationship": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "POST"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    }
+                },
+                "PARAM": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "GET",
+                        "HEAD",
+                        "DELETE",
+                        "PATCH"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    }
+                }
+            },
+            "posts": {
+                "disable": false,
+                "routingDisabled": false,
+                "methods": [
+                    "GET",
+                    "HEAD",
+                    "POST"
+                ],
+                "captcha": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "ratelimit": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "PARAM": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "GET",
+                        "HEAD",
+                        "POST",
+                        "DELETE",
+                        "PATCH"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "opinions": {
+                        "disable": false,
+                        "routingDisabled": false,
+                        "methods": [
+                            "GET",
+                            "HEAD"
+                        ],
+                        "captcha": {
+                            "disable": true,
+                            "max": 20000,
+                            "every": 3600000
+                        },
+                        "ratelimit": {
+                            "disable": true,
+                            "max": 20000,
+                            "every": 3600000
+                        }
+                    }
+                }
+            },
+            "chats": {
+                "disable": false,
+                "routingDisabled": false,
+                "methods": [
+                    "GET",
+                    "HEAD",
+                    "POST"
+                ],
+                "captcha": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "ratelimit": {
+                    "disable": true,
+                    "max": 20000,
+                    "every": 3600000
+                },
+                "PARAM": {
+                    "disable": false,
+                    "routingDisabled": false,
+                    "methods": [
+                        "GET",
+                        "HEAD",
+                        "POST"
+                    ],
+                    "captcha": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "ratelimit": {
+                        "disable": true,
+                        "max": 20000,
+                        "every": 3600000
+                    },
+                    "messages": {
+                        "disable": false,
+                        "routingDisabled": false,
+                        "methods": [
+                            "GET",
+                            "HEAD",
+                            "POST"
+                        ],
+                        "captcha": {
+                            "disable": true,
+                            "max": 20000,
+                            "every": 3600000
+                        },
+                        "ratelimit": {
+                            "disable": true,
+                            "max": 20000,
+                            "every": 3600000
+                        },
+                        "PARAM": {
+                            "disable": false,
+                            "routingDisabled": false,
+                            "methods": [
+                                "GET",
+                                "HEAD",
+                                "DELETE",
+                                "PATCH"
+                            ],
+                            "captcha": {
+                                "disable": true,
+                                "max": 20000,
+                                "every": 3600000
+                            },
+                            "ratelimit": {
+                                "disable": true,
+                                "max": 20000,
+                                "every": 3600000
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

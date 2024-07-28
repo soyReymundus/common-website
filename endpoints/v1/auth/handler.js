@@ -17,12 +17,6 @@ router.use("/register", require("./register.js"));
 router.use("/reset", require("./reset.js"));
 router.use("/verify", require("./verify.js"));
 
-router.use((req, res, next) => {
-    if (req.method != "GET" && req.method != "HEAD") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
-
-    next();
-});
-
 //BLANK PAGE
 router.get("/", async (req, res) => {
     let contract = await DBModels.contracts.findOne({

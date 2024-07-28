@@ -14,12 +14,6 @@ const responsesEnum = require("../../../constants/responsesEnum.js");
 const responseManager = require("../../../utils/responseManager.js");
 const emailResponses = require("../../../constants/emailResponses.js");
 
-router.use((req, res, next) => {
-    if (req.method != "GET" && req.method != "HEAD") return responseManager(req, res, responsesEnum.METHOD_NOT_ALLOWED);
-
-    next();
-});
-
 router.get("/", async (req, res) => {
     let where = {};
     let offset = 0;
