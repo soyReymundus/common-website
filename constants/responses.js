@@ -73,7 +73,8 @@ module.exports = {
         "status": 501,
         "message": {
             "en": "HTTP method not implemented.",
-            "es": "Método HTTP no implementado."
+            "es": "Método HTTP no implementado.",
+            "ja": "HTTPメソッドが実装されていません。"
         }
     },
     100: {
@@ -152,35 +153,40 @@ module.exports = {
         "status": 502,
         "message": {
             "en": "Could not connect to the servers of reCAPTCHA , please try again later.",
-            "es": "No se pudo conectar a los servidores de reCAPTCHA, por favor intenta de nuevo mas tarde."
+            "es": "No se pudo conectar a los servidores de reCAPTCHA, por favor intenta de nuevo mas tarde.",
+            "ja": "reCAPTCHAのサーバーに接続できませんでした。後でもう一度お試しください。"
         }
     },
     110: {
         "status": 504,
         "message": {
             "en": "The servers of reCAPTCHA have not responded, please try again later.",
-            "es": "Los servidores de reCAPTCHA no han respondido, por favor intenta de nuevo mas tarde."
+            "es": "Los servidores de reCAPTCHA no han respondido, por favor intenta de nuevo mas tarde.",
+            "ja": "reCAPTCHAのサーバーが応答しませんでした。後でもう一度お試しください。"
         }
     },
     111: {
         "status": 502,
         "message": {
             "en": "The servers of reCAPTCHA gave an invalid response, please try again later.",
-            "es": "Los servidores de reCAPTCHA dieron una respuesta no válida, por favor intenta de nuevo mas tarde."
+            "es": "Los servidores de reCAPTCHA dieron una respuesta no válida, por favor intenta de nuevo mas tarde.",
+            "ja": "reCAPTCHAのサーバーが無効な応答を返しました。後でもう一度お試しください。"
         }
     },
     112: {
         "status": 403,
         "message": {
             "en": "Please complete the captcha again.",
-            "es": "Por favor, complete el captcha nuevamente."
+            "es": "Por favor, complete el captcha nuevamente.",
+            "ja": "再度キャプチャを完了してください。"
         }
     },
     113: {
         "status": 500,
         "message": {
             "en": "We had an error processing your captcha, please try again later.",
-            "es": "Tuvimos un error al procesar tu captcha, por favor inténtalo nuevamente más tarde."
+            "es": "Tuvimos un error al procesar tu captcha, por favor inténtalo nuevamente más tarde.",
+            "ja": "キャプチャの処理中にエラーが発生しました。後でもう一度お試しください。"
         }
     },
     114: {
@@ -194,22 +200,25 @@ module.exports = {
     115: {
         "status": 429,
         "message": {
-            "en": "You are performing too many operations, please try again later.",
-            "es": "Estás realizando demasiadas operaciones, por favor intenta de nuevo mas tarde."
+            "en": "You are making too many requests, please try again later.",
+            "es": "Estás realizando demasiadas solicitudes, inténtalo de nuevo más tarde.",
+            "ja": "リクエストが多すぎます。後でもう一度お試しください。"
         }
     },
     116: {
         "status": 405,
         "message": {
             "en": "The endpoint is disabled.",
-            "es": "El endpoint está desactivada."
+            "es": "El endpoint está desactivado.",
+            "ja": "エンドポイントは無効になっています。"
         }
     },
     117: {
         "status": 405,
         "message": {
             "en": "The path is disabled.",
-            "es": "La ruta está desactivada."
+            "es": "La ruta está desactivada.",
+            "ja": "パスは無効になっています。"
         }
     },
     1000: {
